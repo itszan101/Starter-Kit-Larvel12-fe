@@ -2330,10 +2330,10 @@ progress {
     display: block;
     width: 100%;
     padding: .375rem .75rem;
-    font-size: 1rem;
+    font-size: .8rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #607080;
+    color: #0A0B0A;
     -webkit-appearance: none;
     appearance: none;
     background-color: #fff;
@@ -2503,10 +2503,10 @@ textarea.form-control-lg {
     display: block;
     width: 100%;
     padding: .375rem 1.75rem .375rem .75rem;
-    font-size: 1rem;
+    font-size: .8rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #607080;
+    color: #0A0B0A;
     -webkit-appearance: none;
     appearance: none;
     background-color: #fff;
@@ -22102,7 +22102,10 @@ body .bi:before, [class^=bi-]:before, [class*=" bi-"]:before {
 }
 
 .form-group label {
-    font-weight: 600
+    font-weight: 400;
+    font-size: .8rem;
+    color: #0A0B0A
+
 }
 
 .form-group small, .form-group .small {

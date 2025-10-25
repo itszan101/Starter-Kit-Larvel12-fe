@@ -3392,7 +3392,7 @@ html[data-bs-theme=dark] .form-control {
     display: block;
     width: 100%;
     padding: .375rem .75rem;
-    font-size: 1rem;
+    font-size: .8rem;
     font-weight: 400;
     line-height: 1.5;
     color: #FAFAFA;
@@ -3565,7 +3565,7 @@ html[data-bs-theme=dark] .form-select {
     display: block;
     width: 100%;
     padding: .375rem 1.75rem .375rem .75rem;
-    font-size: 1rem;
+    font-size: .8rem;
     font-weight: 400;
     line-height: 1.5;
     color: #FAFAFA;
@@ -4324,9 +4324,9 @@ html[data-bs-theme=dark] .btn:disabled, html[data-bs-theme=dark] .btn.disabled, 
 }
 
 html[data-bs-theme=dark] .btn-primary {
-    --bs-btn-color: #fff;
-    --bs-btn-bg: #435ebe;
-    --bs-btn-border-color: #435ebe;
+    --bs-btn-color: #0A0B0A;
+    --bs-btn-bg: #FAFAFA;
+    --bs-btn-border-color: #0A0B0A;
     --bs-btn-hover-color: #fff;
     --bs-btn-hover-bg: #3950a2;
     --bs-btn-hover-border-color: #364b98;
@@ -8704,7 +8704,7 @@ html[data-bs-theme=dark] .btn.btn-light-dark {
 }
 
 html[data-bs-theme=dark] .btn.btn-primary, html[data-bs-theme=dark] .btn.btn-secondary, html[data-bs-theme=dark] .btn.btn-success {
-    color: #fff
+    color: #0A0B0A
 }
 
 html[data-bs-theme=dark] .btn.btn-warning {
@@ -8975,8 +8975,9 @@ html[data-bs-theme=dark] .form-group {
 }
 
 html[data-bs-theme=dark] .form-group label {
-    color: #c2c2d9;
-    font-weight: 600
+    color: #FAFAFA;
+    font-weight: 400;
+    font-size: .8rem;
 }
 
 html[data-bs-theme=dark] .form-group small, html[data-bs-theme=dark] .form-group .small {

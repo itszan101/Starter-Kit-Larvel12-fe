@@ -36,100 +36,132 @@
                 </div>
             </div>
 
-            <!-- Form Create Admin -->
-            <section class="section">
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <form action="{{ route('admins.store') }}" method="POST">
-                            @csrf
-                            {{-- First Name --}}
-                            <div class="mb-3">
-                                <label for="first_name" class="form-label">First Name</label>
-                                <input type="text"
-                                    class="form-control @error('first_name') is-invalid @enderror"
-                                    id="first_name" name="first_name" value="{{ old('first_name') }}" placeholder="John"
-                                    required>
-                                @error('first_name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+            <!-- Multiple Column Form -->
+            <section id="multiple-column-form">
+                <div class="row match-height">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Form Tambah Admin</h4>
                             </div>
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <form class="form" action="{{ route('admins.store') }}" method="POST">
+                                        @csrf
+                                        <div class="row">
+                                            <!-- First Name -->
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="first_name">Nama Depan</label>
+                                                    <input type="text" id="first_name" name="first_name"
+                                                        class="form-control @error('first_name') is-invalid @enderror"
+                                                        value="{{ old('first_name') }}" placeholder="Masukkan nama depan"
+                                                        required>
+                                                    @error('first_name')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
 
-                            {{-- Last Name --}}
-                            <div class="mb-3">
-                                <label for="last_name" class="form-label">Last Name</label>
-                                <input type="text"
-                                    class="form-control @error('last_name') is-invalid @enderror"
-                                    id="last_name" name="last_name" value="{{ old('last_name') }}" placeholder="Doe"
-                                    required>
-                                @error('last_name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                            <!-- Last Name -->
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="last_name">Nama Belakang</label>
+                                                    <input type="text" id="last_name" name="last_name"
+                                                        class="form-control @error('last_name') is-invalid @enderror"
+                                                        value="{{ old('last_name') }}" placeholder="Masukkan nama belakang"
+                                                        required>
+                                                    @error('last_name')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <!-- Email -->
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="email">Email</label>
+                                                    <input type="email" id="email" name="email"
+                                                        class="form-control @error('email') is-invalid @enderror"
+                                                        value="{{ old('email') }}" placeholder="Masukkan email" required>
+                                                    @error('email')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <!-- Birth Date -->
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="birth_date">Tanggal Lahir</label>
+                                                    <input type="date" id="birth_date" name="birth_date"
+                                                        class="form-control @error('birth_date') is-invalid @enderror"
+                                                        value="{{ old('birth_date') }}" required>
+                                                    @error('birth_date')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <!-- Gender -->
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="gender">Gender</label>
+                                                    <select id="gender" name="gender"
+                                                        class="form-select @error('gender') is-invalid @enderror" required>
+                                                        <option value="" disabled selected>-- Pilih Gender --</option>
+                                                        <option value="male"
+                                                            {{ old('gender') == 'male' ? 'selected' : '' }}>Laki-laki
+                                                        </option>
+                                                        <option value="female"
+                                                            {{ old('gender') == 'female' ? 'selected' : '' }}>Perempuan
+                                                        </option>
+                                                    </select>
+                                                    @error('gender')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <!-- Password -->
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="password">Password</label>
+                                                    <input type="password" id="password" name="password"
+                                                        class="form-control @error('password') is-invalid @enderror"
+                                                        placeholder="••••••••" required>
+                                                    @error('password')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <!-- Confirm Password -->
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="password_confirmation">Konfirmasi Password</label>
+                                                    <input type="password" id="password_confirmation"
+                                                        name="password_confirmation" class="form-control"
+                                                        placeholder="Ulangi password" required>
+                                                </div>
+                                            </div>
+
+                                            <!-- Tombol -->
+                                            <div class="col-12 d-flex justify-content-end mt-3">
+                                                <button type="submit"
+                                                    class="btn btn-primary btn-sm me-1 mb-1">Simpan</button>
+                                                <a href="{{ route('admins.list') }}"
+                                                    class="btn btn-light-secondary btn-sm me-1 mb-1">Kembali</a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-
-                            {{-- Email --}}
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email Address</label>
-                                <input type="email"
-                                    class="form-control @error('email') is-invalid @enderror"
-                                    id="email" name="email" value="{{ old('email') }}" placeholder="you@example.com"
-                                    required>
-                                @error('email')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            {{-- Birth Date --}}
-                            <div class="mb-3">
-                                <label for="birth_date" class="form-label">Birth Date</label>
-                                <input type="date"
-                                    class="form-control @error('birth_date') is-invalid @enderror"
-                                    id="birth_date" name="birth_date" value="{{ old('birth_date') }}" required>
-                                @error('birth_date')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            {{-- Gender --}}
-                            <div class="mb-3">
-                                <label for="gender" class="form-label">Gender</label>
-                                <select
-                                    class="form-control @error('gender') is-invalid @enderror"
-                                    id="gender" name="gender" required>
-                                    <option value="" disabled selected>-- Pilih Gender --</option>
-                                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Laki-laki
-                                    </option>
-                                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Perempuan
-                                    </option>
-                                </select>
-                                @error('gender')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            {{-- Password --}}
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password"
-                                    class="form-control @error('password') is-invalid @enderror"
-                                    id="password" name="password" placeholder="••••••••" required>
-                                @error('password')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            {{-- Confirm Password --}}
-                            <div class="mb-3">
-                                <label for="password_confirmation" class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control"
-                                    id="password_confirmation" name="password_confirmation" placeholder="••••••••" required>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">Simpan</button>
-                            <a href="{{ route('admins.list') }}" class="btn btn-secondary">Kembali</a>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </section>
+            <!-- End Multiple Column Form -->
         </div>
     </div>
 @endsection
