@@ -37,9 +37,10 @@
             <!-- Basic Tables start -->
             <section class="section">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         
                     </div>
+
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table" id="table1">
@@ -63,14 +64,69 @@
                                             <td>{{ ucfirst($admin['gender'] ?? '-') }}</td>
                                             <td>
                                                 <a href="{{ route('admins.edit', $admin['id']) }}"
-                                                    class="btn btn-warning btn-sm">Edit</a>
-                                                <form method="POST" action="{{ route('admins.destroy', $admin['id']) }}"
-                                                    style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('Hapus admin ini?')">Hapus</button>
-                                                </form>
+                                                    class="btn btn-warning btn-sm me-1">
+                                                    Edit
+                                                </a>
+
+                                                <!-- Tombol untuk buka modal hapus -->
+                                                <button type="button" class="btn btn-danger btn-sm"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal{{ $admin['id'] }}">
+                                                    Hapus
+                                                </button>
+
+                                                <!-- Modal Konfirmasi Hapus -->
+                                                <div class="modal fade" id="deleteModal{{ $admin['id'] }}" tabindex="-1"
+                                                    aria-labelledby="deleteModalLabel{{ $admin['id'] }}" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-danger text-white">
+                                                                <h5 class="modal-title" id="deleteModalLabel{{ $admin['id'] }}">
+                                                                    Konfirmasi Hapus
+                                                                </h5>
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>Apakah Anda yakin ingin menghapus admin
+                                                                    <strong>{{ $admin['first_name'] }}
+                                                                        {{ $admin['last_name'] }}</strong>?
+                                                                </p>
+                                                                <p class="text-danger fw-bold mb-2">
+                                                                    Aksi ini tidak dapat dibatalkan.
+                                                                </p>
+                                                                <div class="mb-3">
+                                                                    <label for="confirmText{{ $admin['id'] }}"
+                                                                        class="form-label">
+                                                                        Ketik <strong>" hapus data ini "</strong> untuk
+                                                                        melanjutkan:
+                                                                    </label>
+                                                                    <input type="text" class="form-control confirm-input"
+                                                                        id="confirmText{{ $admin['id'] }}"
+                                                                        placeholder="">
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-light-secondary btn-sm"
+                                                                    data-bs-dismiss="modal">
+                                                                    Batal
+                                                                </button>
+
+                                                                <form method="POST"
+                                                                    action="{{ route('admins.destroy', $admin['id']) }}"
+                                                                    class="d-inline">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-danger btn-sm delete-btn"
+                                                                        disabled>
+                                                                        Hapus
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Akhir Modal -->
                                             </td>
                                         </tr>
                                     @empty
@@ -95,4 +151,24 @@
     <script src="{{ asset('assets/extensions/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/static/js/pages/datatables.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Untuk setiap modal hapus
+            document.querySelectorAll('.modal').forEach(modal => {
+                const input = modal.querySelector('.confirm-input');
+                const deleteBtn = modal.querySelector('.delete-btn');
+
+                if (input && deleteBtn) {
+                    input.addEventListener('input', function () {
+                        if (this.value.trim() === "hapus data ini") {
+                            deleteBtn.removeAttribute('disabled');
+                        } else {
+                            deleteBtn.setAttribute('disabled', true);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 @endpush

@@ -2336,9 +2336,9 @@ progress {
     color: #0A0B0A;
     -webkit-appearance: none;
     appearance: none;
-    background-color: #fff;
+    background-color: #fafafa;
     background-clip: padding-box;
-    border: 1px solid #dce7f1;
+    border: 1px solid #adb5bd;
     border-radius: .25rem;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out
 }

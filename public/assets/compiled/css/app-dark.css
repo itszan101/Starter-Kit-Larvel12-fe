@@ -3398,9 +3398,9 @@ html[data-bs-theme=dark] .form-control {
     color: #FAFAFA;
     -webkit-appearance: none;
     appearance: none;
-    background-color: #0A0B0A;
+    background-color: #1B1A1A;
     background-clip: padding-box;
-    border: 1px solid #1B1B1B;
+    border: 1px solid #C2C2D9;
     border-radius: .25rem;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out
 }
@@ -6926,7 +6926,7 @@ html[data-bs-theme=dark] .modal {
     --bs-modal-padding: 1rem;
     --bs-modal-margin: .5rem;
     --bs-modal-color: ;
-    --bs-modal-bg: #1e1e2d;
+    --bs-modal-bg: #1B1A1A;
     --bs-modal-border-color: rgba(0, 0, 0, .2);
     --bs-modal-border-width: 1px;
     --bs-modal-border-radius: .3rem;
