@@ -3141,6 +3141,7 @@ html[data-bs-theme=dark] .table, html[data-bs-theme=dark] .dataTable-table {
 
 html[data-bs-theme=dark] .table>:not(caption)>*>*, html[data-bs-theme=dark] .dataTable-table>:not(caption)>*>* {
     padding: .5rem;
+    font-size: .8rem;
     color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-table-color)));
     background-color: var(--bs-table-bg);
     border-bottom-width: 1px;
@@ -3394,10 +3395,10 @@ html[data-bs-theme=dark] .form-control {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #c2c2d9;
+    color: #FAFAFA;
     -webkit-appearance: none;
     appearance: none;
-    background-color: #1B1B1B;
+    background-color: #0A0B0A;
     background-clip: padding-box;
     border: 1px solid #1B1B1B;
     border-radius: .25rem;
@@ -3567,10 +3568,10 @@ html[data-bs-theme=dark] .form-select {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #c2c2d9;
+    color: #FAFAFA;
     -webkit-appearance: none;
     appearance: none;
-    background-color: #1B1B1B;
+    background-color: #0A0B0A;
     background-image: var(--bs-form-select-bg-img), var(--bs-form-select-bg-icon, none);
     background-repeat: no-repeat;
     background-position: right .75rem center;
@@ -4628,7 +4629,7 @@ html[data-bs-theme=dark] .btn-lg, html[data-bs-theme=dark] .btn-group-lg>.btn {
 html[data-bs-theme=dark] .btn-sm, html[data-bs-theme=dark] .btn-group-sm>.btn {
     --bs-btn-padding-y: .25rem;
     --bs-btn-padding-x: .5rem;
-    --bs-btn-font-size: .875rem;
+    --bs-btn-font-size: .75rem;
     --bs-btn-border-radius: .2rem
 }
 
@@ -5832,7 +5833,7 @@ html[data-bs-theme=dark] .card-header {
     padding: var(--bs-card-cap-padding-y) var(--bs-card-cap-padding-x);
     margin-bottom: 0;
     color: var(--bs-card-cap-color);
-    background-color: var(--bs-card-cap-bg);
+    background-color: var(--bs-card-bg);
     border-bottom: var(--bs-card-border-width) solid var(--bs-card-border-color)
 }
 
@@ -6161,7 +6162,7 @@ html[data-bs-theme=dark] .page-link {
     font-size: var(--bs-pagination-font-size);
     color: var(--bs-pagination-color);
     text-decoration: none;
-    background-color: var(--bs-pagination-bg);
+    background-color: var(--bs-card-bg);
     border: var(--bs-pagination-border-width) solid var(--bs-pagination-border-color);
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out
 }
@@ -10044,8 +10045,8 @@ html[data-bs-theme=dark] #topbarUserDropdown:after {
 }
 
 html[data-bs-theme=dark] .pagination.pagination-primary .page-item.active .page-link {
-    background-color: #435ebe;
-    border-color: #435ebe;
+    background-color: #0A0B0A;
+    border-color: #FAFAFA;
     box-shadow: 0 2px 5px rgba(67, 94, 190, .3)
 }
 
@@ -10102,7 +10103,7 @@ html[data-bs-theme=dark] .page-item i, html[data-bs-theme=dark] .page-item svg {
 }
 
 html[data-bs-theme=dark] .page-item .page-link {
-    font-size: .875rem
+    font-size: .75rem
 }
 
 html[data-bs-theme=dark] .page-item .page-link:focus {

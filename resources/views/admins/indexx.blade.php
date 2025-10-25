@@ -3,6 +3,8 @@
 @section('title', 'Daftar Admin')
 
 @push('styles')
+    <!-- DataTables CSS -->
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> --}}
     <link rel="stylesheet" href="{{ asset('assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" crossorigin href="{{ asset('assets/compiled/css/table-datatable-jquery.css') }}">
 @endpush
@@ -11,6 +13,7 @@
     <!-- BEGIN: Content -->
     <div id="main-content">
         <div class="page-heading">
+            <!-- Page Title & Breadcrumb -->
             <div class="page-title">
                 <div class="row align-items-center">
                     <div class="col-12 col-md-6 order-md-1 order-last">
@@ -33,7 +36,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Basic Tables start -->
             <section class="section">
                 <div class="card">
@@ -45,44 +47,56 @@
                             <table class="table" id="table1">
                                 <thead>
                                     <tr>
-                                        <th>No.</th>
-                                        <th>Nama</th>
+                                        <th>Name</th>
                                         <th>Email</th>
-                                        <th>Tanggal Lahir</th>
-                                        <th>Gender</th>
-                                        <th>Aksi</th>
+                                        <th>Phone</th>
+                                        <th>City</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($admins as $index => $admin)
-                                        <tr>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>{{ $admin['first_name'] }} {{ $admin['last_name'] }}</td>
-                                            <td>{{ $admin['email'] }}</td>
-                                            <td>{{ $admin['birth_date'] ?? '-' }}</td>
-                                            <td>{{ ucfirst($admin['gender'] ?? '-') }}</td>
-                                            <td>
-                                                <a href="{{ route('admins.edit', $admin['id']) }}"
-                                                    class="btn btn-warning btn-sm">Edit</a>
-                                                <form method="POST" action="{{ route('admins.destroy', $admin['id']) }}"
-                                                    style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('Hapus admin ini?')">Hapus</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center">Tidak ada data admin</td>
-                                        </tr>
-                                    @endforelse
+                                    <tr>
+                                        <td>Graiden</td>
+                                        <td>vehicula.aliquet@semconsequat.co.uk</td>
+                                        <td>076 4820 8838</td>
+                                        <td>Offenburg</td>
+                                        <td>
+                                            <span class="badge bg-success">Active</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dale</td>
+                                        <td>fringilla.euismod.enim@quam.ca</td>
+                                        <td>0500 527693</td>
+                                        <td>New Quay</td>
+                                        <td>
+                                            <span class="badge bg-success">Active</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nathaniel</td>
+                                        <td>mi.Duis@diam.edu</td>
+                                        <td>(012165) 76278</td>
+                                        <td>Grumo Appula</td>
+                                        <td>
+                                            <span class="badge bg-danger">Inactive</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Darius</td>
+                                        <td>velit@nec.com</td>
+                                        <td>0309 690 7871</td>
+                                        <td>Ways</td>
+                                        <td>
+                                            <span class="badge bg-success">Active</span>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+
             </section>
             <!-- Basic Tables end -->
         </div>

@@ -2081,6 +2081,7 @@ progress {
 
 .table>:not(caption)>*>*, .dataTable-table>:not(caption)>*>* {
     padding: .5rem;
+    font-size: .8rem;
     color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-heading-color)));
     background-color: var(--bs-table-bg);
     border-bottom-width: 1px;
@@ -3566,7 +3567,7 @@ textarea.form-control-lg {
 .btn-sm, .btn-group-sm>.btn {
     --bs-btn-padding-y: .25rem;
     --bs-btn-padding-x: .5rem;
-    --bs-btn-font-size: .875rem;
+    --bs-btn-font-size: .75rem;
     --bs-btn-border-radius: .2rem
 }
 
@@ -23223,7 +23224,7 @@ body .bi:before, [class^=bi-]:before, [class*=" bi-"]:before {
 }
 
 .page-item .page-link {
-    font-size: .875rem
+    font-size: .75rem
 }
 
 .page-item .page-link:focus {
@@ -23231,7 +23232,7 @@ body .bi:before, [class^=bi-]:before, [class*=" bi-"]:before {
 }
 
 .page-item:first-child {
-    margin-right: .4rem
+    margin-right: .4rem;
 }
 
 .page-item:last-child {

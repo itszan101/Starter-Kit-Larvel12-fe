@@ -31,3 +31,7 @@ Route::prefix('admins')->group(function () {
     Route::put('/{id}', [AdminController::class, 'update'])->name('admins.update');
     Route::delete('/{id}', [AdminController::class, 'destroy'])->name('admins.destroy');
 });
+
+Route::get('/test', function () {
+    return view('admins.indexx');
+});

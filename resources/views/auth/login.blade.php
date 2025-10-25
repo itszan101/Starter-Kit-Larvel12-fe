@@ -14,7 +14,7 @@
                         Don't have an account?
                         <a href="{{ route('register.form') }}" class="text-white fw-bold">Register</a>
                     </p>
-                    <h2 class="fw-bold">Login to your account</h2>
+                    <h2 class="fw-bold text-white">Login to your account</h2>
                     <p class="text-muted">Please enter your details to login.</p>
                 </div>
 
