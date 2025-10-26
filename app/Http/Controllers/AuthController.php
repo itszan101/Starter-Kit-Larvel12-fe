@@ -36,15 +36,19 @@ class AuthController extends Controller
         if ($response->successful()) {
             $data  = $response->json();
             $token = $data['token'] ?? null;
+            $role = $data['role'][0] ?? null;
 
             if ($token) {
                 // simpan token di session
-                session(['api_token' => $token]);
+                session([
+                    'api_token' => $token,
+                    'user_role' => $role
+                ]);
 
                 return redirect()->route('dashboard');
             }
 
-            return back()->withErrors(['email' => 'Token tidak ditemukan dalam response API.']);
+            return back()->withErrors(['password' => 'Login gagal, periksa kembali email & password.']);
         }
 
         return back()->withErrors(['email' => 'Login gagal, periksa kembali email & password.']);

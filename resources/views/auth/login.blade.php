@@ -14,20 +14,20 @@
                         Don't have an account?
                         <a href="{{ route('register.form') }}" class="text-white fw-bold">Register</a>
                     </p>
-                    <h2 class="fw-bold text-white">Login to your account</h2>
+                    <h4 class="fw-bold text-white">Login to your account</h4>
                     <p class="text-muted">Please enter your details to login.</p>
                 </div>
 
                 <!-- Google login button (placeholder) -->
                 <div class="d-grid mb-3">
                     <a href="#" class="btn btn-dark border rounded py-2">
-                        <span class="fw-semibold">G Continue with Google</span>
+                        <span class="fw-semibold" style="font-size: .875rem">G Continue with Google</span>
                     </a>
                 </div>
 
                 <div class="d-flex align-items-center mb-3 text-muted">
                     <hr class="flex-grow-1 border-secondary">
-                    <span class="mx-2 small">Or continue with</span>
+                    <span class="mx-2" style="font-size: .75rem">Or continue with</span>
                     <hr class="flex-grow-1 border-secondary">
                 </div>
 
@@ -64,7 +64,7 @@
                     </div>
 
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-light fw-semibold text-dark">Login</button>
+                        <button type="submit" class="btn btn-light fw-semibold text-dark" style="font-size: .875rem">Login</button>
                     </div>
                 </form>
 

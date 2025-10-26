@@ -4,14 +4,18 @@ if (!function_exists('navigation_links')) {
 
     function navigation_links()
     {
-        return [
+        $role = session('user_role'); // ambil dari sesi
+        $links = [
             [
                 'href' => 'dashboard',
                 'text' => 'Dashboard',
                 'is_multi' => false,
                 'section_icon' => 'bi bi-grid-fill',
             ],
-            [
+        ];
+
+        if ($role === 'admin') {
+            $links[] = [
                 'href' => [
                     [
                         'section_text' => 'Admin',
@@ -24,8 +28,26 @@ if (!function_exists('navigation_links')) {
                 ],
                 'text' => 'Admin',
                 'is_multi' => true,
-            ],
-        ];
+            ];
+        }
+
+        if ($role === 'user') {
+            $links[] = [
+                'href' => [
+                    [
+                        'section_text' => 'User',
+                        'section_list' => [
+                            ['href' => 'test', 'text' => 'Profil Saya'],
+                        ],
+                        'section_icon' => 'bi bi-person-circle',
+                    ],
+                ],
+                'text' => 'User Menu',
+                'is_multi' => true,
+            ];
+        }
+
+        return $links;
     }
 }
 

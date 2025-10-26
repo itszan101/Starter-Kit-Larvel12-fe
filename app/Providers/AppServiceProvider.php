@@ -20,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::share('navigation_links', array_to_object(navigation_links()));
+        View::composer('*', function ($view) {
+            // Panggil helper untuk setiap view
+            $view->with('navigation_links', array_to_object(navigation_links()));
+        });
     }
 }

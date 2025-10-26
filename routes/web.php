@@ -32,5 +32,5 @@ Route::middleware(['check.token:auth'])->group(function () {
 
     Route::get('/test', function () {
         return view('admins.indexx');
-    });
+    })->name('test');
 });

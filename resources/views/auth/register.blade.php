@@ -12,20 +12,20 @@
                 <div class="text-center mb-4">
                     <p class="text-muted">Already have an account? <a href="{{ route('login') }}"
                             class="text-white fw-bold">Login</a></p>
-                    <h2 class="fw-bold">Create your account</h2>
+                    <h4 class="fw-bold">Create your account</h4>
                     <p class="text-muted">Please enter your details to register.</p>
                 </div>
 
                 <!-- Google login button -->
                 <div class="d-grid mb-3">
                     <a href="#" class="btn btn-dark border rounded py-2">
-                        <span class="fw-semibold">G Continue with Google</span>
+                        <span class="fw-semibold" style="font-size: .875rem">G Continue with Google</span>
                     </a>
                 </div>
 
                 <div class="d-flex align-items-center mb-3 text-muted">
                     <hr class="flex-grow-1 border-secondary">
-                    <span class="mx-2 small">Or continue with</span>
+                    <span class="mx-2 small" style="font-size: .75rem">Or continue with</span>
                     <hr class="flex-grow-1 border-secondary">
                 </div>
 
@@ -129,7 +129,7 @@
                     </div>
 
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-xlight fw-semibold text-dark">Register</button>
+                        <button type="submit" class="btn btn-xlight fw-semibold text-dark" style="font-size: .875rem">Register</button>
                     </div>
                 </form>
 
