@@ -7,8 +7,8 @@
     <title>@yield('title', 'Dashboard')</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/extensions/bootstrap-icons/icons/layers-half.svg') }}">
-    <link rel="alternate icon" type="image/png" href="{{ asset('assets/extensions/bootstrap-icons/icons/layers-half.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/extensions/bootstrap-icons/icons/command.svg') }}">
+    <link rel="alternate icon" type="image/png" href="{{ asset('assets/extensions/bootstrap-icons/icons/command.png') }}">
 
     <link rel="stylesheet" crossorigin href="{{ asset('assets/compiled/css/app.css') }}">
     <link rel="stylesheet" crossorigin href="{{ asset('assets/compiled/css/app-dark.css') }}">

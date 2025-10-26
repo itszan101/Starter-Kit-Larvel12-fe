@@ -36,27 +36,31 @@
                     @csrf
                     {{-- Email/Login field --}}
                     <div class="mb-3">
-                        <label for="email" class="form-label text-white">Email Address</label>
-                        <input type="text" id="email" name="email" value="{{ old('email') }}"
-                            class="form-control bg-black text-white border-dark @error('email') is-invalid @enderror"
-                            placeholder="you@example.com" required autofocus>
+                        <div class="form-group">
+                            <label for="email" class="form-label text-white">Email Address</label>
+                            <input type="text" id="email" name="email" value="{{ old('email') }}"
+                                class="form-control bg-black text-white border-dark @error('email') is-invalid @enderror"
+                                placeholder="you@example.com" required autofocus>
 
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     {{-- Password field --}}
                     <div class="mb-3">
-                        <label for="password" class="form-label text-white">Password</label>
-                        <input type="password" id="password" name="password"
-                            class="form-control bg-black text-white border-dark @error('password') is-invalid @enderror"
-                            placeholder="••••••••" required>
+                        <div class="form-group">
+                            <label for="password" class="form-label text-white">Password</label>
+                            <input type="password" id="password" name="password"
+                                class="form-control bg-black text-white border-dark @error('password') is-invalid @enderror"
+                                placeholder="••••••••" required>
 
-                        {{-- Tampilkan error field password --}}
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                            {{-- Tampilkan error field password --}}
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     <div class="d-grid">

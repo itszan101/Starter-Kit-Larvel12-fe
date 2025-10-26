@@ -35,81 +35,97 @@
 
                     {{-- First Name --}}
                     <div class="mb-3">
-                        <label for="first_name" class="form-label text-white">First Name</label>
-                        <input type="text"
-                            class="form-control bg-black text-white border-dark @error('first_name') is-invalid @enderror"
-                            id="first_name" name="first_name" value="{{ old('first_name') }}" placeholder="John" required>
-                        @error('first_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <div class="form-group">
+                            <label for="first_name" class="form-label text-white">First Name</label>
+                            <input type="text"
+                                class="form-control bg-black text-white border-dark @error('first_name') is-invalid @enderror"
+                                id="first_name" name="first_name" value="{{ old('first_name') }}" placeholder="John"
+                                required>
+                            @error('first_name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     {{-- Last Name --}}
                     <div class="mb-3">
-                        <label for="last_name" class="form-label text-white">Last Name</label>
-                        <input type="text"
-                            class="form-control bg-black text-white border-dark @error('last_name') is-invalid @enderror"
-                            id="last_name" name="last_name" value="{{ old('last_name') }}" placeholder="Doe" required>
-                        @error('last_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <div class="form-group">
+                            <label for="last_name" class="form-label text-white">Last Name</label>
+                            <input type="text"
+                                class="form-control bg-black text-white border-dark @error('last_name') is-invalid @enderror"
+                                id="last_name" name="last_name" value="{{ old('last_name') }}" placeholder="Doe" required>
+                            @error('last_name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     {{-- Email --}}
                     <div class="mb-3">
-                        <label for="email" class="form-label text-white">Email Address</label>
-                        <input type="email"
-                            class="form-control bg-black text-white border-dark @error('email') is-invalid @enderror"
-                            id="email" name="email" value="{{ old('email') }}" placeholder="you@example.com"
-                            required>
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <div class="form-group">
+                            <label for="email" class="form-label text-white">Email Address</label>
+                            <input type="email"
+                                class="form-control bg-black text-white border-dark @error('email') is-invalid @enderror"
+                                id="email" name="email" value="{{ old('email') }}" placeholder="you@example.com"
+                                required>
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     {{-- Birth Date --}}
                     <div class="mb-3">
-                        <label for="birth_date" class="form-label text-white">Birth Date</label>
-                        <input type="date"
-                            class="form-control bg-black text-white border-dark @error('birth_date') is-invalid @enderror"
-                            id="birth_date" name="birth_date" value="{{ old('birth_date') }}" required>
-                        @error('birth_date')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <div class="form-group">
+                            <label for="birth_date" class="form-label text-white">Birth Date</label>
+                            <input type="date"
+                                class="form-control bg-black text-white border-dark @error('birth_date') is-invalid @enderror"
+                                id="birth_date" name="birth_date" value="{{ old('birth_date') }}" required>
+                            @error('birth_date')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     {{-- Gender --}}
                     <div class="mb-3">
-                        <label for="gender" class="form-label text-white">Gender</label>
-                        <select class="form-control bg-black text-white border-dark @error('gender') is-invalid @enderror"
-                            id="gender" name="gender" required>
-                            <option value="" disabled selected>-- Pilih Gender --</option>
-                            <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Laki-laki
-                            </option>
-                            <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Perempuan
-                            </option>
-                        </select>
-                        @error('gender')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <div class="form-group">
+                            <label for="gender" class="form-label text-white">Gender</label>
+                            <select
+                                class="form-control bg-black text-white border-dark @error('gender') is-invalid @enderror"
+                                id="gender" name="gender" required>
+                                <option value="" disabled selected>-- Pilih Gender --</option>
+                                <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Laki-laki
+                                </option>
+                                <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Perempuan
+                                </option>
+                            </select>
+                            @error('gender')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     {{-- Password --}}
                     <div class="mb-3">
-                        <label for="password" class="form-label text-white">Password</label>
-                        <input type="password"
-                            class="form-control bg-black text-white border-dark @error('password') is-invalid @enderror"
-                            id="password" name="password" placeholder="••••••••" required>
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <div class="form-group">
+                            <label for="password" class="form-label text-white">Password</label>
+                            <input type="password"
+                                class="form-control bg-black text-white border-dark @error('password') is-invalid @enderror"
+                                id="password" name="password" placeholder="••••••••" required>
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     {{-- Confirm Password --}}
                     <div class="mb-3">
-                        <label for="password_confirmation" class="form-label text-white">Confirm Password</label>
-                        <input type="password" class="form-control bg-black text-white border-dark"
-                            id="password_confirmation" name="password_confirmation" placeholder="••••••••" required>
+                        <div class="form-group">
+                            <label for="password_confirmation" class="form-label text-white">Confirm Password</label>
+                            <input type="password" class="form-control bg-black text-white border-dark"
+                                id="password_confirmation" name="password_confirmation" placeholder="••••••••" required>
+                        </div>
                     </div>
 
                     <div class="d-grid">

@@ -3,7 +3,7 @@
     <div class="sidebar-wrapper active">
         <div class="sidebar-header position-relative">
             <a href="{{ route('dashboard') }}" class="d-flex text-decoration-none align-items-center">
-                <i class="bi bi-layers-half me-2" style="font-size: 1.1rem;"></i>
+                <i class="bi bi-command me-2" style="font-size: 1.1rem;"></i>
                 <span class="logo-text fw-semibold" style="padding-top: 0.8rem;">Algo Admin</span>
             </a>
             <div class="sidebar-toggler x">

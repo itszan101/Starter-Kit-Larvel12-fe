@@ -3358,7 +3358,7 @@ html[data-bs-theme=dark] .table-responsive {
 
 html[data-bs-theme=dark] .form-label {
     margin-bottom: .5rem;
-    color: #c2c2d9
+    color: #fafafa
 }
 
 html[data-bs-theme=dark] .col-form-label {
@@ -3398,11 +3398,18 @@ html[data-bs-theme=dark] .form-control {
     color: #FAFAFA;
     -webkit-appearance: none;
     appearance: none;
-    background-color: #1B1A1A;
+    background-color: #0A0B0A;
     background-clip: padding-box;
-    border: 1px solid #C2C2D9;
+    border: 1px solid #1B1B1B;
     border-radius: .25rem;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out
+}
+
+html[data-bs-theme=dark] .form-control-bg {
+    border : 1px solid #b1b1b1;
+    border-radius: .25rem;
+    color: #fafafa;
+    background-color: #1b1a1a;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3420,11 +3427,10 @@ html[data-bs-theme=dark] .form-control[type=file]:not(:disabled):not([readonly])
 }
 
 html[data-bs-theme=dark] .form-control:focus {
-    color: #c2c2d9;
+    color: #FAFAFA;
     background-color: #1B1B1B;
-    border-color: #1B1B1B;
+    border-color: #1A1B1B;
     outline: 0;
-    box-shadow: 0 0 0 .025rem #ffffff
 }
 
 html[data-bs-theme=dark] .form-control::-webkit-date-and-time-value {
@@ -4965,7 +4971,7 @@ html[data-bs-theme=dark] .dropdown-item {
     padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
     clear: both;
     font-weight: 400;
-    font-size: .875rem;
+    font-size: .75rem;
     color: var(--bs-dropdown-link-color);
     text-align: inherit;
     text-decoration: none;

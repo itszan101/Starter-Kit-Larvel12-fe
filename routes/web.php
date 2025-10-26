@@ -20,18 +20,17 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Dashboard
 Route::middleware(['check.token:auth'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-});
+    // CRUD Admin
+    Route::prefix('admins')->group(function () {
+        Route::get('/', [AdminController::class, 'list'])->name('admins.list');
+        Route::get('/create', [AdminController::class, 'create'])->name('admins.create');
+        Route::post('/', [AdminController::class, 'store'])->name('admins.store');
+        Route::get('/{id}/edit', [AdminController::class, 'edit'])->name('admins.edit');
+        Route::put('/{id}', [AdminController::class, 'update'])->name('admins.update');
+        Route::delete('/{id}', [AdminController::class, 'destroy'])->name('admins.destroy');
+    });
 
-// CRUD Admin
-Route::prefix('admins')->group(function () {
-    Route::get('/', [AdminController::class, 'list'])->name('admins.list');
-    Route::get('/create', [AdminController::class, 'create'])->name('admins.create');
-    Route::post('/', [AdminController::class, 'store'])->name('admins.store');
-    Route::get('/{id}/edit', [AdminController::class, 'edit'])->name('admins.edit');
-    Route::put('/{id}', [AdminController::class, 'update'])->name('admins.update');
-    Route::delete('/{id}', [AdminController::class, 'destroy'])->name('admins.destroy');
-});
-
-Route::get('/test', function () {
-    return view('admins.indexx');
+    Route::get('/test', function () {
+        return view('admins.indexx');
+    });
 });

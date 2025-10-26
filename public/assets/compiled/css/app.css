@@ -2336,11 +2336,17 @@ progress {
     color: #0A0B0A;
     -webkit-appearance: none;
     appearance: none;
-    background-color: #fafafa;
+    background-color: #fff;
     background-clip: padding-box;
-    border: 1px solid #adb5bd;
+    border: 1px solid #dce7f1;
     border-radius: .25rem;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out
+}
+
+.form-control-bg {
+    border : 1px solid #b1b1b1;
+    border-radius: .25rem;
+    color: #0A0B0A;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2358,11 +2364,10 @@ progress {
 }
 
 .form-control:focus {
-    color: #607080;
+    color: #0A0B0A;
     background-color: #fff;
-    border-color: #a1afdf;
+    border-color: #1b1a1a;
     outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(67, 94, 190, .25)
 }
 
 .form-control::-webkit-date-and-time-value {
@@ -2377,7 +2382,7 @@ progress {
 }
 
 .form-control::placeholder {
-    color: #adb5bd;
+    color: var(--bs-secondary-color);
     opacity: 1
 }
 
@@ -3642,7 +3647,7 @@ textarea.form-control-lg {
     --bs-dropdown-padding-x: 0;
     --bs-dropdown-padding-y: .5rem;
     --bs-dropdown-spacer: .125rem;
-    --bs-dropdown-font-size: 1rem;
+    --bs-dropdown-font-size: .75rem;
     --bs-dropdown-color: #607080;
     --bs-dropdown-bg: #fff;
     --bs-dropdown-border-color: rgba(0, 0, 0, .15);

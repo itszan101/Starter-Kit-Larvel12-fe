@@ -38,7 +38,7 @@
             <section class="section">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        
+
                     </div>
 
                     <div class="card-body">
@@ -69,19 +69,20 @@
                                                 </a>
 
                                                 <!-- Tombol untuk buka modal hapus -->
-                                                <button type="button" class="btn btn-danger btn-sm"
-                                                    data-bs-toggle="modal"
+                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                                     data-bs-target="#deleteModal{{ $admin['id'] }}">
                                                     Hapus
                                                 </button>
 
                                                 <!-- Modal Konfirmasi Hapus -->
                                                 <div class="modal fade" id="deleteModal{{ $admin['id'] }}" tabindex="-1"
-                                                    aria-labelledby="deleteModalLabel{{ $admin['id'] }}" aria-hidden="true">
+                                                    aria-labelledby="deleteModalLabel{{ $admin['id'] }}"
+                                                    aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header bg-danger text-white">
-                                                                <h5 class="modal-title" id="deleteModalLabel{{ $admin['id'] }}">
+                                                                <h5 class="modal-title"
+                                                                    id="deleteModalLabel{{ $admin['id'] }}">
                                                                     Konfirmasi Hapus
                                                                 </h5>
                                                                 <button type="button" class="btn-close btn-close-white"
@@ -98,16 +99,16 @@
                                                                 <div class="mb-3">
                                                                     <label for="confirmText{{ $admin['id'] }}"
                                                                         class="form-label">
-                                                                        Ketik <strong>" hapus data ini "</strong> untuk
+                                                                        Ketik <strong>"Hapus data ini"</strong> untuk
                                                                         melanjutkan:
                                                                     </label>
-                                                                    <input type="text" class="form-control confirm-input"
-                                                                        id="confirmText{{ $admin['id'] }}"
-                                                                        placeholder="">
+                                                                    <input type="text" class="form-control form-control-bg confirm-input"
+                                                                        id="confirmText{{ $admin['id'] }}" placeholder="">
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button type="button" class="btn btn-light-secondary btn-sm"
+                                                                <button type="button"
+                                                                    class="btn btn-light-secondary btn-sm"
                                                                     data-bs-dismiss="modal">
                                                                     Batal
                                                                 </button>
@@ -117,8 +118,8 @@
                                                                     class="d-inline">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit" class="btn btn-danger btn-sm delete-btn"
-                                                                        disabled>
+                                                                    <button type="submit"
+                                                                        class="btn btn-danger btn-sm delete-btn" disabled>
                                                                         Hapus
                                                                     </button>
                                                                 </form>
@@ -153,15 +154,16 @@
     <script src="{{ asset('assets/static/js/pages/datatables.js') }}"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             // Untuk setiap modal hapus
             document.querySelectorAll('.modal').forEach(modal => {
                 const input = modal.querySelector('.confirm-input');
                 const deleteBtn = modal.querySelector('.delete-btn');
 
                 if (input && deleteBtn) {
-                    input.addEventListener('input', function () {
-                        if (this.value.trim() === "hapus data ini") {
+                    input.addEventListener('input', function() {
+                        const value = this.value.trim().toLowerCase();
+                        if (value === "hapus data ini") {
                             deleteBtn.removeAttribute('disabled');
                         } else {
                             deleteBtn.setAttribute('disabled', true);

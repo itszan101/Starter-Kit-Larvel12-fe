@@ -80,7 +80,17 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->session()->forget('api_token');
+        $token = Session::get('api_token');
+
+        if ($token) {
+            // Kirim request logout ke backend API
+            $response = Http::withToken($token)->post("{$this->baseUrl}/logout");
+
+            // Opsional: Cek jika berhasil
+            if ($response->successful()) {
+                Session::forget('api_token');
+            }
+        }
         return redirect()->route('login');
     }
 
