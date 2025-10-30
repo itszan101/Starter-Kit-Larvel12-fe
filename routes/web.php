@@ -28,6 +28,7 @@ Route::middleware(['check.token:auth'])->group(function () {
         Route::get('/{id}/edit', [AdminController::class, 'edit'])->name('admins.edit');
         Route::put('/{id}', [AdminController::class, 'update'])->name('admins.update');
         Route::delete('/{id}', [AdminController::class, 'destroy'])->name('admins.destroy');
+        Route::get('/{id}/download-sk', [AdminController::class, 'downloadSk'])->name('admins.download-sk');
     });
 
     Route::get('/test', function () {

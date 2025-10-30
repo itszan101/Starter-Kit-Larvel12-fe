@@ -74,6 +74,11 @@
                                                     Hapus
                                                 </button>
 
+                                                <a href="{{ route('admins.download-sk', $admin['id']) }}"
+                                                    class="btn btn-info btn-sm me-1">
+                                                    Download SK
+                                                </a>
+
                                                 <!-- Modal Konfirmasi Hapus -->
                                                 <div class="modal fade" id="deleteModal{{ $admin['id'] }}" tabindex="-1"
                                                     aria-labelledby="deleteModalLabel{{ $admin['id'] }}"
@@ -102,7 +107,8 @@
                                                                         Ketik <strong>"Hapus data ini"</strong> untuk
                                                                         melanjutkan:
                                                                     </label>
-                                                                    <input type="text" class="form-control form-control-bg confirm-input"
+                                                                    <input type="text"
+                                                                        class="form-control form-control-bg confirm-input"
                                                                         id="confirmText{{ $admin['id'] }}" placeholder="">
                                                                 </div>
                                                             </div>
