@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
-    private $baseUrl = "http://127.0.0.1:8000/api";
+    private $baseUrl = "https://starter-kit-larvel12.vercel.app/api/api";
+    // private $baseUrl = "http://127.0.0.1:8000/api";
 
     public function showLoginForm()
     {
