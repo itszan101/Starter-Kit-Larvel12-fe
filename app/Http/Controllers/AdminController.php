@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {
-    private $baseUrl = "https://starter-kit-larvel12.vercel.app/api/api";
+    private $baseUrl = "https://starter-kit-larvel12.vercel.app/api/api/users";
     // private $baseUrl = "http://127.0.0.1:8000/api/users";
 
     // Dashboard
