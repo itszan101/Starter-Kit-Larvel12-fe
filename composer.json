@@ -20,6 +20,9 @@
         "phpunit/phpunit": "^11.5.3"
     },
     "autoload": {
+        "files": [
+            "app/Helpers/MainHelper.php"
+        ],
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
@@ -27,9 +30,6 @@
         }
     },
     "autoload-dev": {
-        "files": [
-            "app/Helpers/MainHelper.php"
-        ],
         "psr-4": {
             "Tests\\": "tests/"
         }
