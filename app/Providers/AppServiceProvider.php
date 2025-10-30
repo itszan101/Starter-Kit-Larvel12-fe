@@ -20,6 +20,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force HTTPS in production
+        if (config('app.url') == 'https://link-to-your-app.vercel.app') {
+            \URL::forceScheme('https');
+        }
+        
         View::composer('*', function ($view) {
             // Panggil helper untuk setiap view
             $view->with('navigation_links', array_to_object(navigation_links()));
