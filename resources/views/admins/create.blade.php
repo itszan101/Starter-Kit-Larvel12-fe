@@ -94,7 +94,7 @@
                                             </div>
 
                                             <!-- Birth Date -->
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-md-2 col-12">
                                                 <div class="form-group">
                                                     <label for="birth_date">Tanggal Lahir</label>
                                                     <input type="date" id="birth_date" name="birth_date"
