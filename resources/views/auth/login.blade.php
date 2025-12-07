@@ -93,12 +93,12 @@
                 <div class="row">
                     <div class="col-6">
                         <h6 class="fw-bold">Ready to launch?</h6>
-                        <p class="small text-dark">Clone the repo, install dependencies, and your dashboard is live in
+                        <p class="text-dark">Clone the repo, install dependencies, and your dashboard is live in
                             minutes.</p>
                     </div>
                     <div class="col-6">
                         <h6 class="fw-bold">Need help?</h6>
-                        <p class="small text-dark">Check out the docs or open an issue on GitHub, community support is just
+                        <p class="text-dark">Check out the docs or open an issue on GitHub, community support is just
                             a click away.</p>
                     </div>
                 </div>

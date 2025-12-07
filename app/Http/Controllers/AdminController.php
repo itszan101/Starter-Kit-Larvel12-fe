@@ -21,6 +21,20 @@ class AdminController extends Controller
         return view('dashboard');
     }
 
+    public function test()
+    {
+        $profile = [
+            'first_name'       => 'Bayu',
+            'last_name'        => 'Santoso',
+            'birth_date'       => '1998-04-22',
+            'gender'           => 'male',
+            'email'            => 'bayu.santoso@example.com',
+            'profile_picture'  => 'https://i.pravatar.cc/150?img=12',
+        ];
+
+        return view('admins.indexx', compact('profile'));
+    }
+
     // List Admin
     public function list()
     {
@@ -205,9 +219,22 @@ class AdminController extends Controller
     public function destroy($id)
     {
         $token = Session::get('api_token');
-        Http::withToken($token)->delete("{$this->userUrl}/$id");
 
-        return redirect()->route('admins.list')->with('success', 'User berhasil dihapus');
+        $response = Http::withToken($token)
+            ->accept('application/json')
+            ->delete("{$this->userUrl}/$id");
+        // Kalau sukses
+        if ($response->successful()) {
+            return redirect()
+                ->route('admins.list')
+                ->with('success', 'User berhasil dihapus');
+        }
+        // Kalau error, ambil message dari API (fallback kalau kosong)
+        $errorMessage = $response->json('message') ?? 'Gagal menghapus user.';
+
+        return redirect()
+            ->route('admins.list')
+            ->with('error', $errorMessage);
     }
 
     public function downloadSk($id)

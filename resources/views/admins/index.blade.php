@@ -258,23 +258,44 @@
         });
     </script>
 
-    {{-- Toastify hanya untuk success --}}
-    @if (session('success'))
+    {{-- Toastify: Success & Error --}}
+    @if (session('success') || session('error'))
         <script>
-            Toastify({
-                text: {!! json_encode(session('success')) !!},
-                duration: 5000,
-                gravity: "bottom",
-                position: "right",
-                backgroundColor: "#198754",
-                close: true,
-                style: {
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-                    padding: "10px 16px"
-                }
-            }).showToast();
+            @if (session('success'))
+                Toastify({
+                    text: {!! json_encode(session('success')) !!},
+                    duration: 5000,
+                    gravity: "bottom",
+                    position: "right",
+                    backgroundColor: "#198754", // success green
+                    close: true,
+                    style: {
+                        borderRadius: "8px",
+                        fontSize: "14px",
+                        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+                        padding: "10px 16px",
+                        color: "#fff"
+                    }
+                }).showToast();
+            @endif
+
+            @if (session('error'))
+                Toastify({
+                    text: {!! json_encode(session('error')) !!},
+                    duration: 5000,
+                    gravity: "bottom",
+                    position: "right",
+                    backgroundColor: "#dc3545", // danger red
+                    close: true,
+                    style: {
+                        borderRadius: "8px",
+                        fontSize: "14px",
+                        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+                        padding: "10px 16px",
+                        color: "#fff"
+                    }
+                }).showToast();
+            @endif
         </script>
     @endif
 
