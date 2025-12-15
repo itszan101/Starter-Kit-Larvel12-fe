@@ -9,48 +9,45 @@ use Illuminate\Support\Facades\Session;
 
 class RolePermissionController extends Controller
 {
-    private $rolesUrl = "https://starter-kit-larvel12.vercel.app/api/api/roles";
-    // private $rolesUrl = "http://127.0.0.1:8000/api/roles";
-    private $permissionsUrl = "https://starter-kit-larvel12.vercel.app/api/api/permissions";
-    // private $permissionsUrl = "http://127.0.0.1:8000/api/permissions";
-    private $userUrl = "https://starter-kit-larvel12.vercel.app/api/api/users";
-    // private $userUrl = "http://127.0.0.1:8000/api/users";
+    // private $rolesUrl = "https://starter-kit-larvel12.vercel.app/api/api/roles";
+    private $rolesUrl = "http://127.0.0.1:8000/api/roles";
+    // private $permissionsUrl = "https://starter-kit-larvel12.vercel.app/api/api/permissions";
+    private $permissionsUrl = "http://127.0.0.1:8000/api/permissions";
+    // private $userUrl = "https://starter-kit-larvel12.vercel.app/api/api/users";
+    private $userUrl = "http://127.0.0.1:8000/api/users";
 
     // List roles
     public function listRoles()
     {
         $token = Session::get('api_token');
 
-        // Ambil daftar role
         $rolesResponse = Http::withHeaders(['Accept' => 'application/json'])
             ->withToken($token)
-            ->get($this->rolesUrl);
+            ->get(config('app.backend_url') . '/roles');
 
         $roles = $rolesResponse->successful()
             ? ($rolesResponse->json()['roles'] ?? $rolesResponse->json()['data'] ?? [])
             : [];
 
-        // Ambil daftar role dan permission mapping
         $permissionsResponse = Http::withHeaders(['Accept' => 'application/json'])
             ->withToken($token)
-            ->get("{$this->rolesUrl}/manager/permissions");
+            ->get(config('app.backend_url') . '/roles/manager/permissions');
 
         $rolePermissions = $permissionsResponse->successful()
             ? ($permissionsResponse->json()['roles'] ?? $permissionsResponse->json()['data'] ?? [])
             : [];
 
-        // Ambil semua daftar permission (endpoint backend)
         $allPermissionsResponse = Http::withHeaders(['Accept' => 'application/json'])
             ->withToken($token)
-            ->get($this->permissionsUrl);
+            ->get(config('app.backend_url') . '/permissions');
+
         $permissions = $allPermissionsResponse->successful()
             ? ($allPermissionsResponse->json()['permissions'] ?? $allPermissionsResponse->json()['data'] ?? $allPermissionsResponse->json())
             : [];
 
-        // Ambil daftar user
         $usersResponse = Http::withHeaders(['Accept' => 'application/json'])
             ->withToken($token)
-            ->get($this->userUrl);
+            ->get(config('app.backend_url') . '/users');
 
         $users = $usersResponse->successful()
             ? $usersResponse->json()
@@ -63,31 +60,22 @@ class RolePermissionController extends Controller
     public function storeRole(Request $request)
     {
         $request->validate(['name' => 'required|string|max:100']);
-
         $token = Session::get('api_token');
 
         try {
             $response = Http::withHeaders(['Accept' => 'application/json'])
                 ->withToken($token)
-                ->post($this->rolesUrl, ['name' => $request->name]);
+                ->post(config('app.backend_url') . '/roles', ['name' => $request->name]);
 
             $json = $response->json();
 
             return match ($response->status()) {
-                201, 200 => redirect()->route('list.roles')
-                    ->with('success', 'Role berhasil ditambahkan!'),
-
-                422 => redirect()->route('list.roles')
-                    ->withInput()
-                    ->with('error', $json['errors']['name'][0] ?? $json['message'] ?? 'Validasi gagal.'),
-
-                default => redirect()->route('list.roles')
-                    ->withInput()
-                    ->with('error', $json['message'] ?? 'Gagal menambahkan role.')
+                201, 200 => redirect()->route('list.roles')->with('success', 'Role berhasil ditambahkan!'),
+                422 => redirect()->route('list.roles')->withInput()->with('error', $json['errors']['name'][0] ?? $json['message'] ?? 'Validasi gagal.'),
+                default => redirect()->route('list.roles')->withInput()->with('error', $json['message'] ?? 'Gagal menambahkan role.')
             };
         } catch (\Throwable $e) {
-            return redirect()->route('list.roles')
-                ->with('error', 'Gagal terhubung ke server: ' . $e->getMessage());
+            return redirect()->route('list.roles')->with('error', 'Gagal terhubung ke server: ' . $e->getMessage());
         }
     }
 
@@ -95,29 +83,20 @@ class RolePermissionController extends Controller
     public function deleteRole(Request $request, $id)
     {
         $token = Session::get('api_token');
+        $url = config('app.backend_url') . '/roles/' . $id;
 
         try {
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-            ])
+            $response = Http::withHeaders(['Accept' => 'application/json'])
                 ->withToken($token)
-                ->delete("{$this->rolesUrl}/{$id}");
+                ->delete($url);
 
             $json = $response->json();
             $message = $json['message'] ?? 'Terjadi kesalahan saat menghapus role.';
-            // Jika sukses (200 OK)
-            if ($response->successful()) {
-                return redirect()
-                    ->route('list.roles')
-                    ->with('success', $message ?? 'Role berhasil dihapus!');
-            }
-            // Jika status lain (422, 500, dll)
-            return redirect()
-                ->route('list.roles')
-                ->with('error', $message);
+
+            return redirect()->route('list.roles')
+                ->with($response->successful() ? 'success' : 'error', $message);
         } catch (\Throwable $e) {
-            return redirect()
-                ->route('list.roles')
+            return redirect()->route('list.roles')
                 ->with('error', 'Gagal terhubung ke server: ' . $e->getMessage());
         }
     }
@@ -129,7 +108,7 @@ class RolePermissionController extends Controller
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->withToken($token)->get($this->permissionsUrl);
+        ])->withToken($token)->get(config('app.backend_url') . '/permissions');
 
         $permissions = $response->successful()
             ? ($response->json()['permissions'] ?? $response->json()['data'] ?? [])
@@ -138,7 +117,7 @@ class RolePermissionController extends Controller
         // Ambil daftar role juga
         $rolesResponse = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->withToken($token)->get($this->rolesUrl);
+        ])->withToken($token)->get(config('app.backend_url') . '/roles');
 
         $roles = $rolesResponse->successful()
             ? ($rolesResponse->json()['roles'] ?? $rolesResponse->json()['data'] ?? [])
@@ -160,7 +139,7 @@ class RolePermissionController extends Controller
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
             ])->withToken($token)
-                ->post($this->permissionsUrl, [
+                ->post(config('app.backend_url') . '/permissions', [
                     'name' => $request->name,
                 ]);
 
@@ -191,32 +170,27 @@ class RolePermissionController extends Controller
         }
     }
 
-    // Delete permission
+    // Delete Permission
     public function deletePermission($id)
     {
         $token = Session::get('api_token');
+        $url = config('app.backend_url') . '/permissions/' . $id;
 
         try {
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-            ])->withToken($token)
-                ->delete("{$this->permissionsUrl}/{$id}");
+            $response = Http::withHeaders(['Accept' => 'application/json'])
+                ->withToken($token)
+                ->delete($url);
 
             if ($response->successful()) {
-                return redirect()
-                    ->route('list.permissions')
+                return redirect()->route('list.permissions')
                     ->with('success', $response->json()['message'] ?? 'Permission berhasil dihapus!');
             }
 
-            // Tangkap pesan error jika sedang digunakan oleh role
             $json = $response->json();
             $message = $json['message'] ?? 'Gagal menghapus permission.';
-            return redirect()
-                ->route('list.permissions')
-                ->with('error', $message);
+            return redirect()->route('list.permissions')->with('error', $message);
         } catch (\Throwable $e) {
-            return redirect()
-                ->route('list.permissions')
+            return redirect()->route('list.permissions')
                 ->with('error', 'Gagal terhubung ke server: ' . $e->getMessage());
         }
     }
@@ -232,49 +206,37 @@ class RolePermissionController extends Controller
         $token = Session::get('api_token');
 
         try {
-            // Ambil semua role untuk menemukan nama role dari ID
-            $rolesResponse = Http::withHeaders([
-                'Accept' => 'application/json',
-            ])->withToken($token)
-                ->get($this->rolesUrl);
+            $rolesResponse = Http::withHeaders(['Accept' => 'application/json'])
+                ->withToken($token)
+                ->get(config('app.backend_url') . '/roles');
 
             if (!$rolesResponse->successful()) {
-                return redirect()->route('list.permissions')
-                    ->with('error', 'Gagal memuat daftar role.');
+                return redirect()->route('list.permissions')->with('error', 'Gagal memuat daftar role.');
             }
 
             $rolesData = $rolesResponse->json()['roles'] ?? $rolesResponse->json()['data'] ?? [];
             $selectedRole = collect($rolesData)->firstWhere('id', (int)$request->role_id);
 
             if (!$selectedRole || !isset($selectedRole['name'])) {
-                return redirect()->route('list.permissions')
-                    ->with('error', 'Role tidak ditemukan.');
+                return redirect()->route('list.permissions')->with('error', 'Role tidak ditemukan.');
             }
 
             $roleName = $selectedRole['name'];
+            $url = config('app.backend_url') . '/roles/' . $roleName . '/assign-permission';
 
-            // Kirim ke API backend untuk assign permission
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-            ])->withToken($token)
-                ->post("{$this->rolesUrl}/{$roleName}/assign-permission", [
-                    'permissions' => $request->permissions,
-                ]);
-
+            $response = Http::withHeaders(['Accept' => 'application/json'])
+                ->withToken($token)
+                ->post($url, ['permissions' => $request->permissions]);
             if ($response->successful()) {
-                return redirect()
-                    ->route('list.permissions')
+                return redirect()->route('list.permissions')
                     ->with('success', $response->json()['message'] ?? 'Permission berhasil di-assign ke role!');
             }
-
-            $message = $response->json()['message'] ?? 'Gagal assign permission ke role.';
-            return redirect()->route('list.permissions')->with('error', $message);
+            return redirect()->route('list.permissions')->with('error', $response->json()['message'] ?? 'Gagal assign permission ke role.');
         } catch (\Throwable $e) {
-            return redirect()
-                ->route('list.permissions')
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->route('list.permissions')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
 
     // Update permission role
     public function updateRolePermissions(Request $request)
@@ -288,20 +250,23 @@ class RolePermissionController extends Controller
         $roleName = $request->role_name;
 
         try {
+            // Perbaikan URL: gunakan concatenation
+            $url = config('app.backend_url') . '/roles/' . $roleName . '/permissions/update';
+
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
             ])->withToken($token)
-                ->post("{$this->rolesUrl}/{$roleName}/permissions/update", [
+                ->post($url, [
                     'permissions' => $request->permissions ?? []
                 ]);
 
             if ($response->successful()) {
                 return redirect()->route('list.roles')
-                    ->with('success', $response->json()['message'] ?? 'Permissions berhasil diperbarui!');
+                    ->with('success', $response->json('message') ?? 'Permissions berhasil diperbarui!');
             }
 
             return redirect()->route('list.roles')
-                ->with('error', $response->json()['message'] ?? 'Gagal memperbarui permissions.');
+                ->with('error', $response->json('message') ?? 'Gagal memperbarui permissions.');
         } catch (\Throwable $e) {
             return redirect()->route('list.roles')
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -312,19 +277,16 @@ class RolePermissionController extends Controller
     public function assignRole(Request $request, $id)
     {
         $token = Session::get('api_token');
-        // dd($request->input('roles', []));
+        $url = config('app.backend_url') . '/users/' . $id . '/roles/update';
+
         $response = Http::withToken($token)
             ->accept('application/json')
-            ->post("{$this->userUrl}/{$id}/roles/update", [
-                'roles' => $request->input('roles', [])
-            ]);
+            ->post($url, ['roles' => $request->input('roles', [])]);
 
         if ($response->successful()) {
-            $data = $response->json();
-            return redirect()->route('admins.list')->with('success', $data['message'] ?? 'Role berhasil diperbarui.');
-        } else {
-            $errorMessage = $response->json('message') ?? 'Gagal memperbarui role.';
-            return redirect()->route('admins.list')->with('error', $errorMessage);
+            return redirect()->route('admins.list')->with('success', $response->json()['message'] ?? 'Role berhasil diperbarui.');
         }
+
+        return redirect()->route('admins.list')->with('error', $response->json('message') ?? 'Gagal memperbarui role.');
     }
 }

@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {
-    private $userUrl = "https://starter-kit-larvel12.vercel.app/api/api/users";
-    // private $userUrl = "http://127.0.0.1:8000/api/users";
-    private $rolesUrl = "https://starter-kit-larvel12.vercel.app/api/api/roles";
-    // private $rolesUrl = "http://127.0.0.1:8000/api/roles";
-
     // Dashboard
     public function index()
     {
@@ -40,10 +35,10 @@ class AdminController extends Controller
     {
         $token = Session::get('api_token');
 
-        // Ambil daftar admin
+        // Ambil daftar
         $responseAdmins = Http::withToken($token)
             ->accept('application/json')
-            ->get($this->userUrl); //
+            ->get(config('app.backend_url') . '/users');
 
         $admins = [];
         if ($responseAdmins->successful()) {
@@ -54,7 +49,7 @@ class AdminController extends Controller
         // Ambil daftar role yang tersedia
         $responseRoles = Http::withToken($token)
             ->accept('application/json')
-            ->get($this->rolesUrl);
+            ->get(config('app.backend_url') . '/roles');
 
         $availableRoles = [];
         if ($responseRoles->successful()) {
@@ -111,7 +106,7 @@ class AdminController extends Controller
         $response = Http::withToken($token)
             ->accept('application/json')
             ->asMultipart()
-            ->post($this->userUrl, $multipart);
+            ->post(config('app.backend_url') . '/users', $multipart);
 
         // Tangani response sukses, termasuk kasus restore
         if ($response->successful()) {
@@ -140,15 +135,16 @@ class AdminController extends Controller
     public function edit($id)
     {
         $token = Session::get('api_token');
-        $response = Http::withToken($token)->get("{$this->userUrl}/{$id}");
+        $url = config('app.backend_url') . '/users/' . $id;
+        $response = Http::withToken($token)->get($url);
 
         if ($response->successful()) {
             $json = $response->json();
-            $admin = $json['data'] ?? $json; // jaga-jaga kalau API balikin langsung data tunggal
+            $admin = $json['data'] ?? $json;
         } else {
             return redirect()->route('admins.list')->withErrors(['error' => 'Gagal mengambil data admin.']);
         }
-        // dd($admin);
+
         return view('admins.edit', compact('admin'));
     }
 
@@ -164,29 +160,20 @@ class AdminController extends Controller
             'password_confirmation' => 'nullable|string|min:6',
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-        $multipart = [];
-        $multipart[] = [
-            'name' => '_method',
-            'contents' => 'PUT',
+
+        $multipart = [
+            ['name' => '_method', 'contents' => 'PUT'],
         ];
+
         foreach (['first_name', 'last_name', 'email', 'gender'] as $key) {
-            $multipart[] = [
-                'name' => $key,
-                'contents' => (string) ($request->input($key) ?? ''),
-            ];
+            $multipart[] = ['name' => $key, 'contents' => (string)($request->input($key) ?? '')];
         }
-        // password hanya jika diisi (jangan kirim password kosong)
+
         if ($request->filled('password')) {
-            $multipart[] = [
-                'name' => 'password',
-                'contents' => $request->input('password'),
-            ];
-            $multipart[] = [
-                'name' => 'password_confirmation',
-                'contents' => $request->input('password_confirmation') ?? '',
-            ];
+            $multipart[] = ['name' => 'password', 'contents' => $request->password];
+            $multipart[] = ['name' => 'password_confirmation', 'contents' => $request->password_confirmation ?? ''];
         }
-        // tambahkan file jika ada
+
         if ($request->hasFile('profile_picture')) {
             $file = $request->file('profile_picture');
             $multipart[] = [
@@ -195,52 +182,49 @@ class AdminController extends Controller
                 'filename' => $file->getClientOriginalName(),
             ];
         }
+
         $token = Session::get('api_token');
+        $url = config('app.backend_url') . '/users/' . $id;
+
         try {
-            // Kunci: gunakan post() bukan put(), tambahkan _method=PUT di multipart
             $response = Http::withToken($token)
                 ->acceptJson()
                 ->asMultipart()
-                ->post("{$this->userUrl}/{$id}", $multipart);
+                ->post($url, $multipart);
 
             if ($response->successful()) {
-                $message = $response->json('message') ?? 'Admin berhasil diperbarui.';
-                return redirect()->route('admins.list')->with('success', $message);
+                return redirect()->route('admins.list')
+                    ->with('success', $response->json('message') ?? 'Admin berhasil diperbarui.');
             }
 
-            $message = $response->json('message') ?? 'Gagal memperbarui admin.';
-            return redirect()->back()->with('error', $message)->withInput();
+            return back()->with('error', $response->json('message') ?? 'Gagal memperbarui admin.')->withInput();
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
         }
     }
 
-    // Delete Admin
+    // Destroy
     public function destroy($id)
     {
         $token = Session::get('api_token');
+        $url = config('app.backend_url') . '/users/' . $id;
 
         $response = Http::withToken($token)
             ->accept('application/json')
-            ->delete("{$this->userUrl}/$id");
-        // Kalau sukses
-        if ($response->successful()) {
-            return redirect()
-                ->route('admins.list')
-                ->with('success', 'User berhasil dihapus');
-        }
-        // Kalau error, ambil message dari API (fallback kalau kosong)
-        $errorMessage = $response->json('message') ?? 'Gagal menghapus user.';
+            ->delete($url);
 
-        return redirect()
-            ->route('admins.list')
-            ->with('error', $errorMessage);
+        $errorMessage = $response->successful()
+            ? null
+            : $response->json('message') ?? 'Gagal menghapus user.';
+
+        return redirect()->route('admins.list')
+            ->with($response->successful() ? 'success' : 'error', $errorMessage ?? 'User berhasil dihapus');
     }
 
     public function downloadSk($id)
     {
         $token = Session::get('api_token');
-        $response = Http::withToken($token)->get($this->userUrl . '/' . $id);
+        $response = Http::withToken($token)->get((config('app.backend_url') . '/users') . '/' . $id);
 
         if (!$response->successful()) {
             return back()->with('error', 'Gagal mengambil data admin');

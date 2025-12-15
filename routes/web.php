@@ -47,7 +47,7 @@ Route::middleware(['check.token:auth'])->group(function () {
         Route::delete('/{id}', [RolePermissionController::class, 'deletePermission'])->middleware('checkPermission:permission.delete')->name('permissions.delete');
         Route::post('/assign', [RolePermissionController::class, 'assignPermissionToRole'])->middleware('checkPermission:permission.assignRole')->name('permissions.assign');
     });
-    
+
     Route::get('/test', [AdminController::class, 'test'])->name('test');
 });
 
