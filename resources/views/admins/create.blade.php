@@ -163,10 +163,10 @@
 
                                             <!-- Tombol -->
                                             <div class="col-12 d-flex justify-content-end mt-3">
+                                                <a href="{{ route('admins.list') }}"
+                                                class="btn btn-light-secondary btn-sm me-1 mb-1">Kembali</a>
                                                 <button type="submit"
                                                     class="btn btn-primary btn-sm me-1 mb-1">Simpan</button>
-                                                <a href="{{ route('admins.list') }}"
-                                                    class="btn btn-light-secondary btn-sm me-1 mb-1">Kembali</a>
                                             </div>
                                         </div>
                                     </form>

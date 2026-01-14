@@ -64,159 +64,26 @@
                                             <td>{{ ucfirst($admin['gender'] ?? '-') }}</td>
                                             <td>{{ $admin['roles'][0]['name'] ?? '-' }}</td>
                                             <td>
-                                                <button type="button" class="btn icon btn-primary btn-sm me-1"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#assignRoleModal{{ $admin['id'] }}">
-                                                    <i class="bi bi-key"></i>
+                                                <button type="button" class="btn btn-outline-primary btn-sm"
+                                                    data-bs-toggle="modal" data-bs-target="#assignRoleModal"
+                                                    data-id="{{ $admin['id'] }}"
+                                                    data-name="{{ $admin['first_name'] }} {{ $admin['last_name'] }}"
+                                                    data-roles='@json(array_column($admin['roles'], 'name'))'>
+                                                    {{-- <i class="bi bi-key"></i> --}}Assign Role
                                                 </button>
                                                 <a href="{{ route('admins.edit', $admin['id']) }}"
-                                                    class="btn btn-warning btn-sm me-1">
+                                                    class="btn btn-outline-primary btn-sm me-1">
                                                     Edit
                                                 </a>
-                                                <button type="button" class="btn btn-danger btn-sm me-1"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal{{ $admin['id'] }}">
+                                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteAdminModal" data-id="{{ $admin['id'] }}"
+                                                    data-name="{{ $admin['first_name'] }} {{ $admin['last_name'] }}">
                                                     Hapus
                                                 </button>
                                                 <a href="{{ route('admins.download-sk', $admin['id']) }}"
-                                                    class="btn btn-info btn-sm me-1">
+                                                    class="btn btn-outline-info btn-sm me-1">
                                                     Download SK
                                                 </a>
-
-                                                <!-- Modal Konfirmasi Hapus -->
-                                                <div class="modal fade" id="deleteModal{{ $admin['id'] }}" tabindex="-1"
-                                                    aria-labelledby="deleteModalLabel{{ $admin['id'] }}"
-                                                    aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header bg-danger text-white">
-                                                                <h5 class="modal-title"
-                                                                    id="deleteModalLabel{{ $admin['id'] }}">
-                                                                    Konfirmasi Hapus
-                                                                </h5>
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-
-                                                            <div class="modal-body">
-                                                                @php
-                                                                    $fullName = trim(
-                                                                        $admin['first_name'] .
-                                                                            ' ' .
-                                                                            $admin['last_name'],
-                                                                    );
-                                                                    $confirmText = 'Hapus data ' . $fullName;
-                                                                @endphp
-
-                                                                <p>Apakah Anda yakin ingin menghapus admin
-                                                                    <strong>{{ $fullName }}</strong>?
-                                                                </p>
-                                                                <p class="text-danger fw-bold mb-2">Aksi ini tidak dapat
-                                                                    dibatalkan.</p>
-
-                                                                <div class="mb-3">
-                                                                    <label for="confirmText{{ $admin['id'] }}"
-                                                                        class="form-label">
-                                                                        Ketik <strong>"{{ $confirmText }}"</strong> untuk
-                                                                        melanjutkan:
-                                                                    </label>
-                                                                    <input type="text" class="form-control confirm-input"
-                                                                        id="confirmText{{ $admin['id'] }}"
-                                                                        data-confirm-text="{{ strtolower($confirmText) }}"
-                                                                        placeholder=''>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="modal-footer">
-                                                                <button type="button"
-                                                                    class="btn btn-light-secondary btn-sm"
-                                                                    data-bs-dismiss="modal">Batal</button>
-
-                                                                <form method="POST"
-                                                                    action="{{ route('admins.destroy', $admin['id']) }}"
-                                                                    class="d-inline">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit"
-                                                                        class="btn btn-danger btn-sm delete-btn" disabled>
-                                                                        Hapus
-                                                                    </button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Akhir Modal -->
-                                                <!-- Modal Assign Role -->
-                                                <div class="modal fade" id="assignRoleModal{{ $admin['id'] }}"
-                                                    tabindex="-1" aria-labelledby="assignRoleLabel{{ $admin['id'] }}"
-                                                    aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header bg-warning text-dark">
-                                                                <h5 class="modal-title"
-                                                                    id="assignRoleLabel{{ $admin['id'] }}">
-                                                                    Atur Role untuk: {{ $admin['first_name'] }}
-                                                                    {{ $admin['last_name'] }}
-                                                                </h5>
-                                                                <button type="button" class="btn-close btn-close-dark"
-                                                                    data-bs-dismiss="modal"></button>
-                                                            </div>
-
-                                                            <form method="POST"
-                                                                action="{{ route('admins.assign-role', $admin['id']) }}">
-                                                                @csrf
-                                                                @method('PUT')
-
-                                                                <div class="modal-body">
-                                                                    <p class="text-muted mb-2">Pilih satu role yang akan
-                                                                        diberikan kepada pengguna ini:</p>
-                                                                    <div class="row">
-                                                                        @foreach ($availableRoles as $role)
-                                                                            @php
-                                                                                $roleName = strtolower($role['name']);
-                                                                                $isChecked = in_array(
-                                                                                    $role['name'],
-                                                                                    array_column(
-                                                                                        $admin['roles'],
-                                                                                        'name',
-                                                                                    ),
-                                                                                );
-                                                                            @endphp
-                                                                            <div class="col-md-6 mb-2">
-                                                                                <div class="form-check">
-                                                                                    <input
-                                                                                        class="form-check-input single-role-checkbox"
-                                                                                        type="checkbox" name="roles[]"
-                                                                                        value="{{ $roleName }}"
-                                                                                        id="role-{{ $admin['id'] }}-{{ $loop->index }}"
-                                                                                        {{ $isChecked ? 'checked' : '' }}>
-                                                                                    <label class="form-check-label"
-                                                                                        for="role-{{ $admin['id'] }}-{{ $loop->index }}">
-                                                                                        {{ $role['name'] }}
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div>
-                                                                        @endforeach
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="modal-footer">
-                                                                    <button type="button"
-                                                                        class="btn btn-light-secondary btn-sm"
-                                                                        data-bs-dismiss="modal">
-                                                                        Batal
-                                                                    </button>
-                                                                    <button type="submit"
-                                                                        class="btn btn-warning text-dark btn-sm">
-                                                                        <i class="bi bi-save me-1"></i> Simpan Perubahan
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Akhir Modal -->
                                             </td>
                                         </tr>
                                     @empty
@@ -232,6 +99,82 @@
             </section>
         </div>
     </div>
+    
+    {{-- === Modal Delete Admin === --}}
+    <div class="modal fade" id="deleteAdminModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Konfirmasi Hapus</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="text-primary">Hapus admin <strong id="deleteAdminName"></strong>?</p>
+                    <p class="text-danger fw-bold">Aksi ini tidak dapat dibatalkan.</p>
+
+                    <label class="form-label text-primary text-sm">
+                        Ketik <strong id="deleteConfirmLabel"></strong>
+                    </label>
+                    <input type="text" class="form-control confirm-input text-sm">
+                </div>
+
+                <div class="modal-footer">
+                    <form method="POST" id="deleteAdminForm">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-light-secondary btn-sm"
+                            data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger btn-sm delete-btn" disabled>
+                            Hapus
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- === Modal Assign Role === --}}
+    <div class="modal fade" id="assignRoleModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <form method="POST" id="assignRoleForm" class="modal-content">
+                @csrf
+                @method('PUT')
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Atur Role: <span id="assignAdminName"></span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        @foreach ($availableRoles as $role)
+                            <div class="col-md-6 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input role-checkbox" type="checkbox" name="roles[]"
+                                        value="{{ $role['name'] }}">
+                                    <label class="form-check-label text-sm text-primary">
+                                        {{ $role['name'] }}
+                                    </label>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary btn-sm"
+                            data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 @endsection
 
 @push('scripts')
@@ -314,6 +257,61 @@
                     });
                 });
             });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // DELETE ADMIN
+            const deleteModal = document.getElementById('deleteAdminModal');
+            deleteModal.addEventListener('show.bs.modal', e => {
+                const btn = e.relatedTarget;
+                const name = btn.dataset.name;
+                const id = btn.dataset.id;
+
+                const confirmText = `hapus data ${name}`.toLowerCase();
+
+                deleteModal.querySelector('#deleteAdminName').textContent = name;
+                deleteModal.querySelector('#deleteConfirmLabel').textContent = `"Hapus data ${name}"`;
+
+                const input = deleteModal.querySelector('.confirm-input');
+                const submit = deleteModal.querySelector('.delete-btn');
+                const form = deleteModal.querySelector('#deleteAdminForm');
+
+                input.value = '';
+                submit.disabled = true;
+                form.action = `/admins/${id}`;
+
+                input.oninput = () => {
+                    submit.disabled = input.value.trim().toLowerCase() !== confirmText;
+                };
+            });
+
+            // ASSIGN ROLE (SINGLE CHECKBOX BEHAVIOR)
+            const assignModal = document.getElementById('assignRoleModal');
+            assignModal.addEventListener('show.bs.modal', e => {
+                const btn = e.relatedTarget;
+                const id = btn.dataset.id;
+                const name = btn.dataset.name;
+                const roles = JSON.parse(btn.dataset.roles || '[]');
+
+                assignModal.querySelector('#assignAdminName').textContent = name;
+                assignModal.querySelector('#assignRoleForm').action = `/admins/${id}/assign-role`;
+
+                const checkboxes = assignModal.querySelectorAll('.role-checkbox');
+                checkboxes.forEach(cb => {
+                    cb.checked = roles.includes(cb.value);
+                    cb.onchange = () => {
+                        if (cb.checked) {
+                            checkboxes.forEach(other => {
+                                if (other !== cb) other.checked = false;
+                            });
+                        }
+                    };
+                });
+            });
+
         });
     </script>
 

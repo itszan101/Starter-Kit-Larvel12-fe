@@ -70,60 +70,14 @@
                                             </td>
                                             <td>
                                                 <!-- Tombol Hapus -->
-                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal{{ $permission['id'] }}">
+                                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
+                                                    data-bs-target="#deletePermissionModal"
+                                                    data-id="{{ $permission['id'] }}"
+                                                    data-name="{{ $permission['name'] }}">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </td>
                                         </tr>
-
-                                        <!-- Modal Konfirmasi Hapus (di dalam loop, tapi di luar <tr>) -->
-                                        <div class="modal fade" id="deleteModal{{ $permission['id'] }}" tabindex="-1"
-                                            aria-labelledby="deleteModalLabel{{ $permission['id'] }}" aria-hidden="true"
-                                            data-confirm-text="hapus permission {{ strtolower($permission['name']) }}">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header bg-danger text-white">
-                                                        <h5 class="modal-title">Konfirmasi Hapus</h5>
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="modal"></button>
-                                                    </div>
-
-                                                    <div class="modal-body">
-                                                        <p>Apakah Anda yakin ingin menghapus permission
-                                                            <strong>{{ $permission['name'] }}</strong>?
-                                                        </p>
-                                                        <p class="text-danger fw-bold mb-2">
-                                                            Aksi ini tidak dapat dibatalkan.
-                                                        </p>
-
-                                                        <div class="mb-3">
-                                                            <label class="form-label">
-                                                                Ketik <strong>"Hapus permission
-                                                                    {{ $permission['name'] }}"</strong> untuk konfirmasi:
-                                                            </label>
-                                                            <input type="text" class="form-control confirm-input"
-                                                                id="confirmText{{ $permission['id'] }}"
-                                                                placeholder="Hapus permission {{ $permission['name'] }}">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-light-secondary btn-sm"
-                                                            data-bs-dismiss="modal">Batal</button>
-
-                                                        <form method="POST"
-                                                            action="{{ route('permissions.delete', $permission['id']) }}"
-                                                            class="d-inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm delete-btn"
-                                                                disabled>Hapus</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     @empty
                                         <tr>
                                             <td colspan="6" class="text-center">Tidak ada data permission</td>
@@ -137,11 +91,9 @@
             </section>
         </div>
     </div>
-    <!-- Modal Konfirmasi Hapus -->
-    <div class="modal fade" id="deleteModal{{ $permission['id'] }}" tabindex="-1"
-        aria-labelledby="deleteModalLabel{{ $permission['id'] }}" aria-hidden="true"
-        data-confirm-text="hapus permission {{ strtolower($permission['name']) }}">
-        {{-- ← tambahkan ini --}}
+
+    <!-- Modal Konfirmasi Hapus Permission -->
+    <div class="modal fade" id="deletePermissionModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
@@ -150,36 +102,40 @@
                 </div>
 
                 <div class="modal-body">
-                    <p>Apakah Anda yakin ingin menghapus permission
-                        <strong>{{ $permission['name'] }}</strong>?
+                    <p>
+                        Apakah Anda yakin ingin menghapus permission
+                        <strong id="permissionName"></strong>?
                     </p>
+
                     <p class="text-danger fw-bold mb-2">
                         Aksi ini tidak dapat dibatalkan.
                     </p>
 
                     <div class="mb-3">
-                        <label class="form-label">
-                            Ketik <strong>"Hapus permission
-                                {{ $permission['name'] }}"</strong> untuk
-                            konfirmasi:
+                        <label class="form-label text-sm">
+                            Ketik <strong id="confirmLabel"></strong> untuk konfirmasi:
                         </label>
-                        <input type="text" class="form-control confirm-input" id="confirmText{{ $permission['id'] }}"
-                            placeholder="Hapus permission {{ $permission['name'] }}">
+                        <input type="text" class="form-control confirm-input text-sm" placeholder="">
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">
+                        Batal
+                    </button>
 
-                    <form method="POST" action="{{ route('permissions.delete', $permission['id']) }}" class="d-inline">
+                    <form method="POST" id="deletePermissionForm">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm delete-btn" disabled>Hapus</button>
+                        <button type="submit" class="btn btn-light-secondary btn-sm delete-btn" disabled>
+                            Hapus
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Modal Tambah Permission -->
     <div class="modal fade" id="addPermissionModal" tabindex="-1" aria-labelledby="addPermissionModalLabel"
         aria-hidden="true">
@@ -187,18 +143,16 @@
             <div class="modal-content">
                 <form method="POST" action="{{ route('permissions.store') }}">
                     @csrf
-                    <div class="modal-header bg-primary text-white">
+                    <div class="modal-header text-white">
                         <h5 class="modal-title">Tambah Permission Baru</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <label class="form-label">Nama Permission</label>
-                        <input type="text" name="name" class="form-control" placeholder="Contoh: user.view"
-                            required>
+                        <label class="form-label text-sm text-primary">Nama Permission</label>
+                        <input type="text" name="name" class="form-control text-sm text-primary" placeholder="Contoh: user.view" required>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light-secondary btn-sm"
-                            data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-light-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
                     </div>
                 </form>
@@ -281,4 +235,34 @@
             });
         </script>
     @endif
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('deletePermissionModal');
+            const nameEl = modal.querySelector('#permissionName');
+            const labelEl = modal.querySelector('#confirmLabel');
+            const input = modal.querySelector('.confirm-input');
+            const btn = modal.querySelector('.delete-btn');
+            const form = modal.querySelector('#deletePermissionForm');
+
+            modal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const id = button.dataset.id;
+                const name = button.dataset.name;
+
+                const confirmText = `hapus permission ${name}`.toLowerCase();
+
+                nameEl.textContent = name;
+                labelEl.textContent = `"Hapus permission ${name}"`;
+                input.placeholder = `Hapus permission ${name}`;
+                input.value = '';
+                btn.disabled = true;
+
+                form.action = `/permissions/${id}`; // SESUAI route delete lu
+
+                input.oninput = function() {
+                    btn.disabled = input.value.trim().toLowerCase() !== confirmText;
+                };
+            });
+        });
+    </script>
 @endpush

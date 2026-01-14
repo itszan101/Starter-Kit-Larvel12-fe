@@ -59,187 +59,20 @@
                                             <td>{{ \Carbon\Carbon::parse($role['created_at'])->format('d M Y H:i') }}</td>
                                             <td>{{ \Carbon\Carbon::parse($role['updated_at'])->format('d M Y H:i') }}</td>
                                             <td>
-                                                <!-- Tombol Lihat Detail -->
-                                                <button type="button" class="btn btn-info btn-sm me-1"
-                                                    data-bs-toggle="modal" data-bs-target="#viewModal{{ $role['id'] }}">
+                                                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                                    data-bs-target="#viewModal" data-role-id="{{ $role['id'] }}">
                                                     <i class="bi bi-eye"></i>
                                                 </button>
 
-                                                <!-- Tombol Hapus -->
-                                                <button type="button" class="btn btn-danger btn-sm me-1" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal{{ $role['id'] }}">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-
-                                                <!-- Tombol Manage Permissions -->
-                                                <button type="button" class="btn btn-warning btn-sm me-1"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#permissionModal{{ $role['id'] }}">
+                                                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                                    data-bs-target="#permissionModal" data-role-id="{{ $role['id'] }}">
                                                     <i class="bi bi-key"></i>
                                                 </button>
 
-                                                <!-- Modal Konfirmasi Hapus -->
-                                                <div class="modal fade" id="deleteModal{{ $role['id'] }}" tabindex="-1"
-                                                    aria-labelledby="deleteModalLabel{{ $role['id'] }}"
-                                                    aria-hidden="true"
-                                                    data-role-name="{{ strtolower('hapus role ' . $role['name']) }}">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header bg-danger text-white">
-                                                                <h5 class="modal-title"
-                                                                    id="deleteModalLabel{{ $role['id'] }}">
-                                                                    Konfirmasi Hapus
-                                                                </h5>
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <p>Apakah Anda yakin ingin menghapus role
-                                                                    <strong>{{ $role['name'] }}</strong>?
-                                                                </p>
-                                                                <p class="text-danger fw-bold mb-2">Aksi ini tidak dapat
-                                                                    dibatalkan.</p>
-                                                                <div class="mb-3">
-                                                                    <label for="confirmText{{ $role['id'] }}"
-                                                                        class="form-label">
-                                                                        Ketik <strong>"Hapus role
-                                                                            {{ $role['name'] }}"</strong> untuk
-                                                                        melanjutkan:
-                                                                    </label>
-                                                                    <input type="text"
-                                                                        class="form-control form-control-bg confirm-input"
-                                                                        id="confirmText{{ $role['id'] }}" placeholder="">
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button"
-                                                                    class="btn btn-light-secondary btn-sm"
-                                                                    data-bs-dismiss="modal">Batal</button>
-
-                                                                <form action="{{ route('roles.delete', $role['id']) }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit"
-                                                                        class="btn btn-danger btn-sm delete-btn"
-                                                                        disabled>Hapus</button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Modal Detail Role -->
-                                                @php
-                                                    $roleData =
-                                                        collect($rolePermissions)->firstWhere('role', $role['name']) ??
-                                                        [];
-                                                @endphp
-                                                <div class="modal fade" id="viewModal{{ $role['id'] }}" tabindex="-1"
-                                                    aria-labelledby="viewModalLabel{{ $role['id'] }}" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header bg-info text-darks">
-                                                                <h5 class="modal-title"
-                                                                    id="viewModalLabel{{ $role['id'] }}">
-                                                                    Detail Role: {{ $role['name'] }}
-                                                                </h5>
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <p><strong>Nama Role:</strong> {{ $role['name'] }}</p>
-                                                                <hr>
-                                                                <h6>Permissions:</h6>
-                                                                @if (!empty($roleData['permissions']))
-                                                                    <div class="d-flex flex-wrap gap-2">
-                                                                        @foreach ($roleData['permissions'] as $perm)
-                                                                            <span class="badge bg-light text-dark border">
-                                                                                {{ $perm }}
-                                                                            </span>
-                                                                        @endforeach
-                                                                    </div>
-                                                                @else
-                                                                    <p class="text-muted fst-italic mb-0">Tidak ada
-                                                                        permission</p>
-                                                                @endif
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-light-secondary"
-                                                                    data-bs-dismiss="modal">Tutup</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Akhir Modal Detail -->
-
-                                                <!-- Modal Manage Permissions -->
-                                                @php
-                                                    $roleData =
-                                                        collect($rolePermissions)->firstWhere('role', $role['name']) ??
-                                                        [];
-                                                    $rolePerms = $roleData['permissions'] ?? [];
-                                                @endphp
-
-                                                <div class="modal fade" id="permissionModal{{ $role['id'] }}"
-                                                    tabindex="-1"
-                                                    aria-labelledby="permissionModalLabel{{ $role['id'] }}"
-                                                    aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header bg-warning text-dark">
-                                                                <h5 class="modal-title"
-                                                                    id="permissionModalLabel{{ $role['id'] }}">
-                                                                    Kelola Permissions untuk Role: {{ $role['name'] }}
-                                                                </h5>
-                                                                <button type="button" class="btn-close btn-close-dark"
-                                                                    data-bs-dismiss="modal"></button>
-                                                            </div>
-
-                                                            <form method="POST"
-                                                                action="{{ route('roles.update.permissions') }}">
-                                                                @csrf
-                                                                <input type="hidden" name="role_name"
-                                                                    value="{{ $role['name'] }}">
-                                                                <div class="modal-body">
-                                                                    <div class="row">
-                                                                        @foreach ($permissions as $perm)
-                                                                            @php
-                                                                                $permName = is_array($perm)
-                                                                                    ? $perm['name'] ?? ''
-                                                                                    : $perm;
-                                                                            @endphp
-                                                                            <div class="col-md-4 mb-2">
-                                                                                <div class="form-check">
-                                                                                    <input class="form-check-input"
-                                                                                        type="checkbox"
-                                                                                        name="permissions[]"
-                                                                                        value="{{ $permName }}"
-                                                                                        id="perm-{{ $role['id'] }}-{{ $loop->index }}"
-                                                                                        {{ in_array($permName, $rolePerms ?? []) ? 'checked' : '' }}>
-                                                                                    <label class="form-check-label"
-                                                                                        for="perm-{{ $role['id'] }}-{{ $loop->index }}">
-                                                                                        {{ $permName }}
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div>
-                                                                        @endforeach
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-light-secondary btn-sm"
-                                                                        data-bs-dismiss="modal">Batal</button>
-                                                                    <button type="submit"
-                                                                        class="btn btn-warning text-dark btn-sm">
-                                                                        <i class="bi bi-save me-1"></i> Simpan Perubahan
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Akhir Modal -->
+                                                <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal" data-role-id="{{ $role['id'] }}">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     @empty
@@ -256,13 +89,142 @@
             <!-- Basic Tables end -->
         </div>
     </div>
+
+    {{-- === Modal View === --}}
+    @foreach ($roles as $role)
+        @php
+            $roleData = collect($rolePermissions)->firstWhere('role', $role['name']) ?? [];
+        @endphp
+
+        <div class="modal fade role-view-modal" id="viewModal-{{ $role['id'] }}" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header text-white">
+                        <h5 class="modal-title">Detail Role: {{ $role['name'] }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Nama Role:</strong> {{ $role['name'] }}</p>
+                        <hr>
+                        @if (!empty($roleData['permissions']))
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach ($roleData['permissions'] as $perm)
+                                    <span class="badge bg-light text-dark text-sm border">
+                                        {{ $perm }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="text-muted fst-italic">Tidak ada permission</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    {{-- === Modal Permission === --}}
+    @foreach ($roles as $role)
+        @php
+            $roleData = collect($rolePermissions)->firstWhere('role', $role['name']) ?? [];
+            $rolePerms = $roleData['permissions'] ?? [];
+        @endphp
+
+        <div class="modal fade role-permission-modal" id="permissionModal-{{ $role['id'] }}" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <form method="POST" action="{{ route('roles.update.permissions') }}" class="modal-content">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Kelola Permission: {{ $role['name'] }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <input type="hidden" name="role_name" value="{{ $role['name'] }}">
+
+                    <div class="modal-body">
+                        <div class="row">
+                            @foreach ($permissions as $perm)
+                                @php
+                                    $permName = is_array($perm) ? $perm['name'] : $perm;
+                                @endphp
+                                <div class="col-md-4 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="permissions[]"
+                                            value="{{ $permName }}"
+                                            {{ in_array($permName, $rolePerms) ? 'checked' : '' }}>
+                                        <label class="form-check-label text-sm text-primary">
+                                            {{ $permName }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger btn-sm" data-bs-dismiss="modal">
+                            Batal
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endforeach
+
+    {{-- === Modal Delete === --}}
+    @foreach ($roles as $role)
+        <div class="modal fade role-delete-modal" id="deleteModal-{{ $role['id'] }}" tabindex="-1"
+            data-role-name="{{ strtolower('hapus role ' . $role['name']) }}">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">Konfirmasi Hapus</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah Anda yakin ingin menghapus permission
+                            <strong>{{ $role['name'] }}</strong>?
+                        </p>
+                        <p class="text-danger fw-bold mb-2">
+                            Aksi ini tidak dapat dibatalkan.
+                        </p>
+
+                        <div class="mb-3">
+                            <label class="form-label text-sm">
+                                Ketik <strong>"Hapus role
+                                    {{ $role['name'] }}"</strong> untuk
+                                konfirmasi:
+                            </label>
+                            <input type="text" class="form-control text-sm confirm-input"
+                                id="confirmText{{ $role['id'] }}" placeholder="Hapus role {{ $role['name'] }}">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <form method="POST" action="{{ route('roles.delete', $role['id']) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm delete-btn" disabled>
+                                Hapus
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
     <!-- Modal Tambah Role -->
     <div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
+                <div class="modal-header text-white">
                     <h5 class="modal-title" id="addRoleModalLabel">Tambah Role Baru</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
 
@@ -270,8 +232,8 @@
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="roleName" class="form-label fw-semibold">Nama Role</label>
-                            <input type="text" name="name" id="roleName" class="form-control"
+                            <label for="roleName" class="form-label fw-semibold text-sm">Nama Role</label>
+                            <input type="text" name="name" id="roleName" class="form-control text-sm"
                                 placeholder="Contoh: manager" required>
                         </div>
                     </div>
@@ -359,4 +321,39 @@
             });
         </script>
     @endif
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            document.querySelectorAll('[data-role-id]').forEach(btn => {
+                btn.addEventListener('click', function() {
+
+                    const id = this.dataset.roleId;
+                    const target = this.dataset.bsTarget;
+
+                    if (!target) return;
+
+                    const modalId = target + '-' + id;
+                    const modalEl = document.querySelector(modalId);
+
+                    if (modalEl) {
+                        bootstrap.Modal.getOrCreateInstance(modalEl).show();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.role-delete-modal').forEach(modal => {
+                const input = modal.querySelector('.confirm-input');
+                const btn = modal.querySelector('.delete-btn');
+                const expected = modal.dataset.roleName;
+
+                input.addEventListener('input', () => {
+                    btn.disabled =
+                        input.value.trim().toLowerCase() !== expected;
+                });
+            });
+
+        });
+    </script>
+
 @endpush

@@ -2,6 +2,8 @@
 
 This repository contains the **frontend layer** for the Laravel API Starter Kit.
 
+[https://github.com/itszan101/Starter-Kit-Larvel12]
+
 It is a **server-rendered Laravel application (Blade)** that consumes a separate backend API for authentication, authorization, and data management.
 
 The frontend acts purely as a **client**:
