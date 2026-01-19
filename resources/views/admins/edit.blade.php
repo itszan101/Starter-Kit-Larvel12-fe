@@ -5,6 +5,57 @@
 @push('styles')
     <!-- Tambahkan CSS khusus jika diperlukan -->
     <link rel="stylesheet" crossorigin href="{{ asset('assets/extensions/toastify-js/src/toastify.css') }}">
+    <style>
+        .avatar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .avatar-box {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            background: #f9fafb;
+        }
+
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 28px;
+            opacity: 0;
+            transition: opacity .2s ease;
+        }
+
+        .avatar-box:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        .avatar-title {
+            margin-top: 12px;
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+
+        .avatar-subtitle {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -38,113 +89,113 @@
             </div>
 
             <!-- Multiple Column Form -->
-            <section id="multiple-column-form">
-                <div class="row match-height">
+            <section class="section">
+                <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Form Edit Admin</h4>
+                                <h4 class="card-title">Edit Admin</h4>
                             </div>
-                            <div class="card-content">
-                                <div class="card-body">
-                                    <form class="form" action="{{ route('admins.update', $admin['id']) }}" method="POST"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PUT')
 
-                                        <div class="row">
-                                            <!-- Nama Depan -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="first_name">Nama Depan</label>
-                                                    <input type="text" id="first_name" name="first_name"
-                                                        class="form-control" placeholder="Masukkan nama depan"
-                                                        value="{{ old('first_name', $admin['first_name']) }}" required>
-                                                </div>
-                                            </div>
+                            <div class="card-body">
+                                <form action="{{ route('admins.update', $admin['id']) }}" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT')
 
-                                            <!-- Nama Belakang -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="last_name">Nama Belakang</label>
-                                                    <input type="text" id="last_name" name="last_name"
-                                                        class="form-control" placeholder="Masukkan nama belakang"
-                                                        value="{{ old('last_name', $admin['last_name']) }}" required>
-                                                </div>
-                                            </div>
+                                    <div class="row g-4">
 
-                                            <!-- Email -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="email">Email</label>
-                                                    <input type="email" id="email" name="email" class="form-control"
-                                                        placeholder="Masukkan email"
-                                                        value="{{ old('email', $admin['email']) }}" required>
-                                                </div>
-                                            </div>
+                                        {{-- AVATAR --}}
+                                        <div class="col-lg-4">
+                                            <div class="avatar-wrapper text-center">
 
-                                            <!-- Gender -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="gender">Gender</label>
-                                                    <select id="gender" name="gender" class="form-select" required>
-                                                        <option value="">-- Pilih Gender --</option>
-                                                        <option value="male"
-                                                            {{ old('gender', $admin['gender']) === 'male' ? 'selected' : '' }}>
-                                                            Laki-laki</option>
-                                                        <option value="female"
-                                                            {{ old('gender', $admin['gender']) === 'female' ? 'selected' : '' }}>
-                                                            Perempuan</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                                <label for="profile_picture" class="avatar-box">
+                                                    <img id="avatarPreview"
+                                                        src="{{ $admin['profile_picture'] ? asset('storage/' . $admin['profile_picture']) : 'https://i.pravatar.cc/300' }}"
+                                                        alt="Avatar">
 
-                                            <!-- Password -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="password">Password <small>(Kosongkan jika tidak
-                                                            diubah)</small></label>
-                                                    <input type="password" id="password" name="password"
-                                                        class="form-control" placeholder="Isi jika ingin ubah password">
-                                                </div>
-                                            </div>
+                                                    <div class="avatar-overlay">
+                                                        <i class="bi bi-camera-fill"></i>
+                                                    </div>
+                                                </label>
 
-                                            <!-- Konfirmasi Password -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="password_confirmation">Konfirmasi Password</label>
-                                                    <input type="password" id="password_confirmation"
-                                                        name="password_confirmation" class="form-control"
-                                                        placeholder="Ulangi password baru">
-                                                </div>
-                                            </div>
+                                                <p class="avatar-title">Foto Profil</p>
+                                                <small class="avatar-subtitle">Klik untuk mengganti</small>
 
-                                            <!-- Foto Profil -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="profile_picture">Foto Profil</label>
-                                                    <input type="file" id="profile_picture" name="profile_picture"
-                                                        class="form-control">
-                                                    @if (!empty($admin['profile_picture']))
-                                                        <div class="mt-2">
-                                                            <img src="{{ env('BACKEND_URL') . '/storage/' . $admin['profile_picture'] }}"
-                                                                alt="Foto Profil"
-                                                                style="max-width: 120px; border-radius: 8px;">
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-
-                                            <!-- Tombol -->
-                                            <div class="col-12 d-flex justify-content-end mt-3">
-                                                <a href="{{ route('admins.list') }}"
-                                                class="btn btn-light-secondary btn-sm me-1 mb-1">Kembali</a>
-                                                <button type="submit"
-                                                    class="btn btn-primary btn-sm me-1 mb-1">Perbarui</button>
+                                                <input type="file" id="profile_picture" name="profile_picture"
+                                                    class="d-none" accept="image/*" onchange="previewAvatar(this)">
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
+
+                                        {{-- FORM --}}
+                                        <div class="col-lg-8">
+                                            <div class="row g-3">
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Nama Depan</label>
+                                                        <input type="text" name="first_name" class="form-control"
+                                                            value="{{ old('first_name', $admin['first_name']) }}" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Nama Belakang</label>
+                                                        <input type="text" name="last_name" class="form-control"
+                                                            value="{{ old('last_name', $admin['last_name']) }}" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Email</label>
+                                                        <input type="email" name="email" class="form-control"
+                                                            value="{{ old('email', $admin['email']) }}" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Gender</label>
+                                                        <select name="gender" class="form-select" required>
+                                                            <option value="male"
+                                                                {{ $admin['gender'] == 'male' ? 'selected' : '' }}>
+                                                                Laki-laki</option>
+                                                            <option value="female"
+                                                                {{ $admin['gender'] == 'female' ? 'selected' : '' }}>
+                                                                Perempuan
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Password <small>(opsional)</small></label>
+                                                        <input type="password" name="password" class="form-control">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Konfirmasi Password</label>
+                                                        <input type="password" name="password_confirmation"
+                                                            class="form-control">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end mt-4">
+                                        <a href="{{ route('admins.list') }}"
+                                            class="btn btn-sm btn-light-outline-secondary me-2">Kembali</a>
+                                        <button class="btn btn-sm btn-outline-primary">Perbarui</button>
+                                    </div>
+
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -158,6 +209,18 @@
 @push('scripts')
     <!-- Tambahkan JS khusus jika perlu -->
     <script src="{{ asset('assets/extensions/toastify-js/src/toastify.js') }}"></script>
+    <script>
+        function previewAvatar(input) {
+            if (!input.files || !input.files[0]) return;
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('avatarPreview').src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             @if (session('success'))

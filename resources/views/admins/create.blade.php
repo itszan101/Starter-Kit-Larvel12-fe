@@ -5,6 +5,38 @@
 @push('styles')
     <!-- Tambahkan CSS khusus jika perlu -->
     <link rel="stylesheet" crossorigin href="{{ asset('assets/extensions/toastify-js/src/toastify.css') }}">
+    <style>
+        .avatar-upload {
+            cursor: pointer;
+        }
+
+        .avatar-upload img {
+            width: 128px;
+            height: 128px;
+            object-fit: cover;
+        }
+
+        .avatar-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: .2s ease;
+        }
+
+        .avatar-upload:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        .avatar-overlay i {
+            color: #fff;
+            font-size: 1.5rem;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -38,144 +70,162 @@
             </div>
 
             <!-- Multiple Column Form -->
-            <section id="multiple-column-form">
-                <div class="row match-height">
+            <section class="section">
+                <div class="row justify-content-center">
                     <div class="col-12">
+
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Form Tambah Admin</h4>
+                                <h4 class="card-title mb-0"></h4>
                             </div>
-                            <div class="card-content">
-                                <div class="card-body">
-                                    <form class="form" action="{{ route('admins.store') }}" method="POST"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="row">
 
-                                            <!-- First Name -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="first_name">Nama Depan</label>
-                                                    <input type="text" id="first_name" name="first_name"
-                                                        class="form-control @error('first_name') is-invalid @enderror"
-                                                        value="{{ old('first_name') }}" placeholder="Masukkan nama depan"
-                                                        required>
-                                                    @error('first_name')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
+                            <div class="card-body">
+                                <form action="{{ route('admins.store') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+
+                                    <div class="row g-4">
+
+                                        {{-- LEFT : AVATAR --}}
+                                        <div class="col-12 col-lg-4">
+                                            <div class="text-center">
+
+                                                <div class="avatar avatar-2xl mx-auto mb-3 position-relative avatar-upload"
+                                                    onclick="document.getElementById('profile_picture').click()">
+
+                                                    <img src="{{ asset('assets/compiled/jpg/2.jpg') }}" id="avatarPreview"
+                                                        class="rounded-circle border" alt="Avatar">
+
+                                                    <div class="avatar-overlay">
+                                                        <i class="bi bi-camera"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <!-- Last Name -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="last_name">Nama Belakang</label>
-                                                    <input type="text" id="last_name" name="last_name"
-                                                        class="form-control @error('last_name') is-invalid @enderror"
-                                                        value="{{ old('last_name') }}" placeholder="Masukkan nama belakang"
-                                                        required>
-                                                    @error('last_name')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
+                                                <h6 class="mb-1">Foto Profil</h6>
+                                                <small class="text-muted">Klik avatar untuk upload</small>
 
-                                            <!-- Email -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="email">Email</label>
-                                                    <input type="email" id="email" name="email"
-                                                        class="form-control @error('email') is-invalid @enderror"
-                                                        value="{{ old('email') }}" placeholder="Masukkan email" required>
-                                                    @error('email')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
+                                                <input type="file" id="profile_picture" name="profile_picture"
+                                                    class="d-none @error('profile_picture') is-invalid @enderror"
+                                                    accept="image/*" onchange="previewAvatar(this)">
 
-                                            <!-- Birth Date -->
-                                            <div class="col-md-2 col-12">
-                                                <div class="form-group">
-                                                    <label for="birth_date">Tanggal Lahir</label>
-                                                    <input type="date" id="birth_date" name="birth_date"
-                                                        class="form-control @error('birth_date') is-invalid @enderror"
-                                                        value="{{ old('birth_date') }}" required>
-                                                    @error('birth_date')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-
-                                            <!-- Gender -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="gender">Gender</label>
-                                                    <select id="gender" name="gender"
-                                                        class="form-select @error('gender') is-invalid @enderror" required>
-                                                        <option value="" disabled selected>-- Pilih Gender --</option>
-                                                        <option value="male"
-                                                            {{ old('gender') == 'male' ? 'selected' : '' }}>Laki-laki
-                                                        </option>
-                                                        <option value="female"
-                                                            {{ old('gender') == 'female' ? 'selected' : '' }}>Perempuan
-                                                        </option>
-                                                    </select>
-                                                    @error('gender')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-
-                                            <!-- Profile Picture -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="profile_picture">Foto Profil</label>
-                                                    <input type="file" id="profile_picture" name="profile_picture"
-                                                        class="form-control @error('profile_picture') is-invalid @enderror">
-                                                    @error('profile_picture')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-
-                                            <!-- Password -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="password">Password</label>
-                                                    <input type="password" id="password" name="password"
-                                                        class="form-control @error('password') is-invalid @enderror"
-                                                        placeholder="••••••••" required>
-                                                    @error('password')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-
-                                            <!-- Confirm Password -->
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="password_confirmation">Konfirmasi Password</label>
-                                                    <input type="password" id="password_confirmation"
-                                                        name="password_confirmation" class="form-control"
-                                                        placeholder="Ulangi password" required>
-                                                </div>
-                                            </div>
-
-                                            <!-- Tombol -->
-                                            <div class="col-12 d-flex justify-content-end mt-3">
-                                                <a href="{{ route('admins.list') }}"
-                                                class="btn btn-light-secondary btn-sm me-1 mb-1">Kembali</a>
-                                                <button type="submit"
-                                                    class="btn btn-primary btn-sm me-1 mb-1">Simpan</button>
+                                                @error('profile_picture')
+                                                    <div class="text-danger small mt-2">{{ $message }}</div>
+                                                @enderror
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
+
+                                        {{-- RIGHT : FORM --}}
+                                        <div class="col-12 col-lg-8">
+                                            <div class="row g-3">
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Nama Depan</label>
+                                                        <input type="text" name="first_name"
+                                                            class="form-control @error('first_name') is-invalid @enderror"
+                                                            value="{{ old('first_name') }}" required>
+                                                        @error('first_name')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Nama Belakang</label>
+                                                        <input type="text" name="last_name"
+                                                            class="form-control @error('last_name') is-invalid @enderror"
+                                                            value="{{ old('last_name') }}" required>
+                                                        @error('last_name')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Email</label>
+                                                        <input type="email" name="email"
+                                                            class="form-control @error('email') is-invalid @enderror"
+                                                            value="{{ old('email') }}" required>
+                                                        @error('email')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Tanggal Lahir</label>
+                                                        <input type="date" name="birth_date"
+                                                            class="form-control @error('birth_date') is-invalid @enderror"
+                                                            value="{{ old('birth_date') }}" required>
+                                                        @error('birth_date')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Gender</label>
+                                                        <select name="gender"
+                                                            class="form-select @error('gender') is-invalid @enderror"
+                                                            required>
+                                                            <option value="" disabled selected>Pilih Gender</option>
+                                                            <option value="male"
+                                                                {{ old('gender') === 'male' ? 'selected' : '' }}>Laki-laki
+                                                            </option>
+                                                            <option value="female"
+                                                                {{ old('gender') === 'female' ? 'selected' : '' }}>
+                                                                Perempuan
+                                                            </option>
+                                                        </select>
+                                                        @error('gender')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Password</label>
+                                                        <input type="password" name="password"
+                                                            class="form-control @error('password') is-invalid @enderror"
+                                                            required>
+                                                        @error('password')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Konfirmasi Password</label>
+                                                        <input type="password" name="password_confirmation"
+                                                            class="form-control" required>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    {{-- ACTION --}}
+                                    <div class="d-flex justify-content-end mt-4">
+                                        <a href="{{ route('admins.list') }}"
+                                            class="btn btn-sm btn-outline-light-secondary me-2">Kembali</a>
+                                        <button type="submit" class="btn btn-sm btn-outline-primary">Simpan</button>
+                                    </div>
+
+                                </form>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </section>
+
             <!-- End Multiple Column Form -->
         </div>
     </div>
@@ -184,6 +234,19 @@
 @push('scripts')
     <!-- Tambahkan JS khusus jika perlu -->
     <script src="{{ asset('assets/extensions/toastify-js/src/toastify.js') }}"></script>
+
+    <script>
+        function previewAvatar(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader()
+                reader.onload = e => {
+                    document.getElementById('avatarPreview').src = e.target.result
+                }
+                reader.readAsDataURL(input.files[0])
+            }
+        }
+    </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             @if (session('error'))

@@ -76,58 +76,34 @@ class AdminController extends Controller
             'birth_date' => 'required|date',
             'gender'     => 'required|in:male,female',
             'password'   => 'required|string|min:6|confirmed',
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        $payload = $validated;
+        $payload['password_confirmation'] = $request->password_confirmation;
+
+        // Upload file di frontend
+        if ($request->hasFile('profile_picture')) {
+            $path = $request->file('profile_picture')
+                ->store('profiles', 'public');
+
+            $payload['profile_picture'] = $path;
+        }
 
         $token = Session::get('api_token');
 
-        // Siapkan multipart form
-        $multipart = [
-            ['name' => 'first_name', 'contents' => $validated['first_name']],
-            ['name' => 'last_name',  'contents' => $validated['last_name']],
-            ['name' => 'email',      'contents' => $validated['email']],
-            ['name' => 'birth_date', 'contents' => $validated['birth_date']],
-            ['name' => 'gender',     'contents' => $validated['gender']],
-            ['name' => 'password',   'contents' => $validated['password']],
-            ['name' => 'password_confirmation', 'contents' => $request->password_confirmation],
-        ];
-
-        // Tambahkan file jika ada
-        if ($request->hasFile('profile_picture')) {
-            $file = $request->file('profile_picture');
-            $multipart[] = [
-                'name' => 'profile_picture',
-                'contents' => fopen($file->getPathname(), 'r'),
-                'filename' => $file->getClientOriginalName(),
-            ];
-        }
-
-        // Kirim ke backend
         $response = Http::withToken($token)
-            ->accept('application/json')
-            ->asMultipart()
-            ->post(config('app.backend_url') . '/users', $multipart);
+            ->acceptJson()
+            ->post(config('app.backend_url') . '/users', $payload);
 
-        // Tangani response sukses, termasuk kasus restore
         if ($response->successful()) {
-            $message = $response->json('message') ?? 'Admin berhasil ditambahkan!';
             return redirect()
                 ->route('admins.list')
-                ->with('success', $message);
+                ->with('success', $response->json('message'));
         }
 
-        // Tangani error validasi atau email sudah aktif
-        if ($response->status() === 422) {
-            $errorMessage = $response->json('message') ?? 'Validasi gagal.';
-            return back()
-                ->with('error', $errorMessage)
-                ->withInput();
-        }
-
-        // Tangani error umum lain
-        $errorMessage = $response->json('message') ?? 'Gagal menambahkan admin.';
         return back()
-            ->with('error', $errorMessage)
+            ->with('error', $response->json('message') ?? 'Gagal')
             ->withInput();
     }
 
@@ -151,56 +127,46 @@ class AdminController extends Controller
     // Update Admin
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
+        $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name'  => 'required|string|max:255',
             'email'      => 'required|email|max:255',
             'gender'     => 'required|in:male,female',
             'password'   => 'nullable|string|min:6|confirmed',
-            'password_confirmation' => 'nullable|string|min:6',
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $multipart = [
-            ['name' => '_method', 'contents' => 'PUT'],
-        ];
+        $payload = $request->only([
+            'first_name',
+            'last_name',
+            'email',
+            'gender',
+            'password',
+            'password_confirmation',
+        ]);
 
-        foreach (['first_name', 'last_name', 'email', 'gender'] as $key) {
-            $multipart[] = ['name' => $key, 'contents' => (string)($request->input($key) ?? '')];
-        }
-
-        if ($request->filled('password')) {
-            $multipart[] = ['name' => 'password', 'contents' => $request->password];
-            $multipart[] = ['name' => 'password_confirmation', 'contents' => $request->password_confirmation ?? ''];
+        if (!$request->filled('password')) {
+            unset($payload['password']);
+            unset($payload['password_confirmation']);
         }
 
         if ($request->hasFile('profile_picture')) {
-            $file = $request->file('profile_picture');
-            $multipart[] = [
-                'name' => 'profile_picture',
-                'contents' => fopen($file->getRealPath(), 'r'),
-                'filename' => $file->getClientOriginalName(),
-            ];
+            $payload['profile_picture'] = $request
+                ->file('profile_picture')
+                ->store('profiles', 'public');
         }
 
-        $token = Session::get('api_token');
-        $url = config('app.backend_url') . '/users/' . $id;
+        $response = Http::withToken(Session::get('api_token'))
+            ->acceptJson()
+            ->put(config('app.backend_url') . '/users/' . $id, $payload);
 
-        try {
-            $response = Http::withToken($token)
-                ->acceptJson()
-                ->asMultipart()
-                ->post($url, $multipart);
-
-            if ($response->successful()) {
-                return redirect()->route('admins.list')
-                    ->with('success', $response->json('message') ?? 'Admin berhasil diperbarui.');
-            }
-
-            return back()->with('error', $response->json('message') ?? 'Gagal memperbarui admin.')->withInput();
-        } catch (\Exception $e) {
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+        if ($response->failed()) {
+            // dd($payload, $response->json());
         }
+
+        return redirect()
+            ->route('admins.list')
+            ->with('success', 'Admin diperbarui');
     }
 
     // Destroy
