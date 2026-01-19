@@ -9,13 +9,6 @@ use Illuminate\Support\Facades\Session;
 
 class RolePermissionController extends Controller
 {
-    // private $rolesUrl = "https://starter-kit-larvel12.vercel.app/api/api/roles";
-    private $rolesUrl = "http://127.0.0.1:8000/api/roles";
-    // private $permissionsUrl = "https://starter-kit-larvel12.vercel.app/api/api/permissions";
-    private $permissionsUrl = "http://127.0.0.1:8000/api/permissions";
-    // private $userUrl = "https://starter-kit-larvel12.vercel.app/api/api/users";
-    private $userUrl = "http://127.0.0.1:8000/api/users";
-
     // List roles
     public function listRoles()
     {

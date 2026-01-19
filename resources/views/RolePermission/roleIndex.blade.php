@@ -164,9 +164,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger btn-sm" data-bs-dismiss="modal">
-                            Batal
-                        </button>
+                        <button type="button" class="btn btn-light-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary btn-sm">
                             Simpan
                         </button>
@@ -224,8 +222,7 @@
             <div class="modal-content">
                 <div class="modal-header text-white">
                     <h5 class="modal-title" id="addRoleModalLabel">Tambah Role Baru</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <form method="POST" action="{{ route('roles.store') }}">
