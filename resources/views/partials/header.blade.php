@@ -1,3 +1,10 @@
+@php
+    $id = Session::get('user_data')['id'];
+    $url = config('app.backend_url') . '/users/' . $id;
+    $response = Http::withToken(Session::get('api_token'))->get($url);
+    $admin = $response->successful() ? $response->json() : null;
+@endphp
+
 <header>
     <nav class="navbar navbar-expand navbar-light navbar-top">
         <div class="container-fluid">
@@ -81,7 +88,9 @@
                             </div>
                             <div class="user-img d-flex align-items-center">
                                 <div class="avatar avatar-md">
-                                    <img src="{{ asset('assets/compiled/jpg/1.jpg') }}" class="rounded-0">
+                                    <img class="rounded-0"
+                                        src="{{ $admin['profile_picture'] ? asset('storage/' . $admin['profile_picture']) : asset('assets/images/faces/1.jpg') }}"
+                                        alt="Avatar">
                                 </div>
                             </div>
                         </div>
@@ -90,7 +99,8 @@
                         <li>
                             <h6 class="dropdown-header">Hello, {{ $user['name'] ?? 'User' }}!</h6>
                         </li>
-                        <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i> My
+                        <li><a class="dropdown-item" href="{{ route('profile.index') }}"><i
+                                    class="icon-mid bi bi-person me-2"></i> My
                                 Profile</a></li>
                         <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-gear me-2"></i>
                                 Settings</a></li>

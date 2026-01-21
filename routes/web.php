@@ -22,6 +22,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Dashboard
 Route::middleware(['check.token:auth'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [AdminController::class, 'profile'])->name('profile.index');
+    Route::put('/profile', [AdminController::class, 'updateProfile'])->name('profile.update');
+
     // CRUD Admin
     Route::prefix('admins')->group(function () {
         Route::get('/', [AdminController::class, 'list'])->middleware('checkPermission:user.view')->name('admins.list');

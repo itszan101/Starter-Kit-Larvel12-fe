@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Admin')
+@section('title', 'Profile')
 
 @push('styles')
     <!-- Tambahkan CSS khusus jika diperlukan -->
@@ -65,9 +65,9 @@
             <div class="page-title">
                 <div class="row align-items-center">
                     <div class="col-12 col-md-6 order-md-1 order-last">
-                        <h3>Edit Admin</h3>
+                        <h3>Account Profile</h3>
                         <p class="text-subtitle text-muted">
-                            Perbarui data admin.
+                            Perbarui informasi data profil.
                         </p>
                     </div>
                     <div class="col-12 col-md-6 order-md-2 order-first">
@@ -98,7 +98,7 @@
                             </div>
 
                             <div class="card-body">
-                                <form action="{{ route('admins.update', $admin['id']) }}" method="POST"
+                                <form action="{{ route('profile.update', $admin['id']) }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
@@ -109,7 +109,7 @@
                                         <div class="col-lg-4">
                                             <div class="avatar-wrapper text-center">
 
-                                                <label for="profile_picture" class="avatar-box mb-2">
+                                                <label for="profile_picture" class="avatar-box">
                                                     <img id="avatarPreview"
                                                         src="{{ $admin['profile_picture'] ? asset('storage/' . $admin['profile_picture']) : 'https://i.pravatar.cc/300' }}"
                                                         alt="Avatar">
@@ -119,7 +119,7 @@
                                                     </div>
                                                 </label>
 
-                                                <p class="avatar-title">{{ $admin['first_name'] }}</p>
+                                                <p class="avatar-title">Foto Profil</p>
                                                 <small class="avatar-subtitle">Klik untuk mengganti</small>
 
                                                 <input type="file" id="profile_picture" name="profile_picture"
@@ -170,17 +170,24 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label class="form-label">Password <small>(opsional)</small></label>
-                                                        <input type="password" name="password" class="form-control">
+                                                        <label class="form-label">Password Lama</label>
+                                                        <input type="password" name="current_password" class="form-control">
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label class="form-label">Konfirmasi Password</label>
-                                                        <input type="password" name="password_confirmation"
+                                                        <label class="form-label">Password Baru</label>
+                                                        <input type="password" name="new_password" class="form-control">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Konfirmasi Password Baru</label>
+                                                        <input type="password" name="new_password_confirmation"
                                                             class="form-control">
                                                     </div>
                                                 </div>
@@ -190,7 +197,7 @@
                                     </div>
 
                                     <div class="d-flex justify-content-end mt-4">
-                                        <a href="{{ route('admins.list') }}"
+                                        <a href="{{ route('profile.update') }}"
                                             class="btn btn-sm btn-light-outline-secondary me-2">Kembali</a>
                                         <button class="btn btn-sm btn-outline-primary">Perbarui</button>
                                     </div>
@@ -211,30 +218,13 @@
     <script src="{{ asset('assets/extensions/toastify-js/src/toastify.js') }}"></script>
     <script>
         function previewAvatar(input) {
-            if (!input.files || !input.files[0]) {
-                console.log("Tidak ada file dipilih");
-                return;
-            }
-
-            const file = input.files[0];
-
-            if (!file.type.startsWith('image/')) {
-                alert("File harus berupa gambar!");
-                input.value = "";
-                return;
-            }
+            if (!input.files || !input.files[0]) return;
 
             const reader = new FileReader();
-            reader.onload = function(e) {
-                const avatar = document.getElementById('avatarPreview');
-                if (avatar) {
-                    avatar.src = e.target.result;
-                    console.log("Preview berhasil di-set");
-                } else {
-                    console.error("Element #avatarPreview tidak ditemukan");
-                }
+            reader.onload = e => {
+                document.getElementById('avatarPreview').src = e.target.result;
             };
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(input.files[0]);
         }
     </script>
 

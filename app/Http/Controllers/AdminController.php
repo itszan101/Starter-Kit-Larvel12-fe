@@ -187,6 +187,77 @@ class AdminController extends Controller
             ->with($response->successful() ? 'success' : 'error', $errorMessage ?? 'User berhasil dihapus');
     }
 
+    public function profile()
+    {
+        $token = Session::get('api_token');
+        $id = Session::get('user_data')['id'];
+        $url = config('app.backend_url') . '/users/' . $id;
+        $response = Http::withToken($token)->get($url);
+
+        if ($response->successful()) {
+            $json = $response->json();
+            $admin = $json['data'] ?? $json;
+        } else {
+            return redirect()->route('admins.list')->withErrors(['error' => 'Gagal mengambil data admin.']);
+        }
+
+        return view('admins.profile', compact('admin'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name'  => 'required|string|max:255',
+            'email'      => 'required|email',
+            'gender'     => 'required|in:male,female',
+            'current_password' => 'nullable|string',
+            'new_password'     => 'nullable|string|min:6|confirmed',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $payload = $request->only([
+            'first_name',
+            'last_name',
+            'email',
+            'gender',
+            'current_password',
+            'new_password',
+            'new_password_confirmation',
+        ]);
+
+        // ⬇️ SIMPAN FILE DI FRONTEND
+        if ($request->hasFile('profile_picture')) {
+            $path = $request->file('profile_picture')
+                ->store('profiles', 'public');
+
+            // ⬇️ KIRIM PATH KE BACKEND
+            $payload['profile_picture'] = $path;
+        }
+
+        if (!$request->filled('new_password')) {
+            unset(
+                $payload['current_password'],
+                $payload['new_password'],
+                $payload['new_password_confirmation']
+            );
+        }
+
+        $response = Http::withToken(Session::get('api_token'))
+            ->acceptJson()
+            ->put(config('app.backend_url') . '/user/profile', $payload);
+
+        if ($response->failed()) {
+            abort(422, $response->json('message'));
+        }
+
+        Session::put('user_data', $response->json('data'));
+
+        return redirect()
+            ->route('profile.index')
+            ->with('success', 'Profil berhasil diperbarui');
+    }
+
     public function downloadSk($id)
     {
         $token = Session::get('api_token');
